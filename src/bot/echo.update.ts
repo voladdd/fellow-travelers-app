@@ -5,7 +5,7 @@ import { Context as TelegrafContext } from 'telegraf';
 export class EchoUpdate {
   @Start()
   async start(@Ctx() ctx: TelegrafContext) {
-    await ctx.reply('Welcome');
+    await ctx.reply('Hello ' + ctx.message.from.first_name);
   }
 
   @Help()
@@ -18,8 +18,19 @@ export class EchoUpdate {
     await ctx.reply('👍');
   }
 
-  @Hears('hi')
-  async hears(@Ctx() ctx: TelegrafContext) {
-    await ctx.reply('Hey there');
+  @Hears('weather')
+  async weatherForecast(@Ctx() ctx: TelegrafContext) {
+    await ctx.replyWithMarkdownV2('InlineKeyboardMarkup', {
+      reply_markup: {
+        inline_keyboard: [
+          [
+            {
+              text: 'open',
+              web_app: { url: 'https://voladdd.github.io/weather-forecast/' },
+            },
+          ],
+        ],
+      },
+    });
   }
 }
