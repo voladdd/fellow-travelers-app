@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { ToursService } from './tours.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Tour, TourSchema } from './schemas/tour.schema';
+import { ToursController } from './tours.controller';
 
 @Module({
   imports: [
@@ -9,6 +10,6 @@ import { Tour, TourSchema } from './schemas/tour.schema';
   ],
   providers: [ToursService],
   exports: [ToursService],
-  controllers: [],
+  controllers: [ToursController],
 })
 export class ToursModule {}

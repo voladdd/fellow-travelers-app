@@ -1,3 +1,4 @@
+import mongoose, { ObjectId } from 'mongoose';
 import { UsersService } from './../users/users.service';
 import { Update, Ctx, Start, Hears } from 'nestjs-telegraf';
 import { Context as TelegrafContext } from 'telegraf';
@@ -9,16 +10,16 @@ export class EchoUpdate {
   @Start()
   async start(@Ctx() ctx: TelegrafContext) {
     //get user info
-    const id = ctx.message.from.id;
+    const _id = ctx.message.from.id;
     const name = ctx.message.from.username;
     const firstName = ctx.message.from.first_name;
 
     //check if user already inited
-    const res = await this.usersService.findUserById(id);
+    const res = await this.usersService.findById(_id);
     if (!res) {
-      console.log('user created' + id);
+      console.log('user created' + _id);
       await this.usersService.create({
-        id,
+        _id,
         name,
         firstName,
       });

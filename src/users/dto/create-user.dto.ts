@@ -1,5 +1,7 @@
+import mongoose from 'mongoose';
+
 export class CreateUserDto {
-  id: number;
+  _id: number;
   name: string;
   firstName: string;
 }

@@ -13,8 +13,8 @@ export class UsersService {
     return createdUser.save();
   }
 
-  async findUserById(id: number): Promise<User | null> {
-    const findedUser = this.userModel.findOne({ id });
+  async findById(id: number): Promise<User | null> {
+    const findedUser = this.userModel.findById(id);
     return findedUser;
   }
 
