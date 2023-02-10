@@ -4,6 +4,8 @@ import { TelegrafModule } from 'nestjs-telegraf';
 import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { UsersModule } from './users/users.module';
+import { ToursService } from './tours/tours.service';
+import { ToursModule } from './tours/tours.module';
 
 @Module({
   imports: [
@@ -16,8 +18,9 @@ import { UsersModule } from './users/users.module';
     }),
     UsersModule,
     EchoModule,
+    ToursModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [ToursService],
 })
 export class AppModule {}
