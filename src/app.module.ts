@@ -1,5 +1,3 @@
-import { UsersService } from './users/users.service';
-import { EchoUpdate } from './bot/echo.update';
 import { EchoModule } from './bot/echo.module';
 import { Module } from '@nestjs/common';
 import { TelegrafModule } from 'nestjs-telegraf';
