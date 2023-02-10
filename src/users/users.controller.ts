@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, HttpException, HttpStatus } from '@nestjs/common';
 import { UsersService } from './users.service';
 
 @Controller('users')
@@ -6,6 +6,12 @@ export class UsersController {
   constructor(private usersService: UsersService) {}
   @Get()
   async findAll() {
-    return await this.usersService.findAll();
+    try {
+      return await this.usersService.findAll();
+    } catch (error) {
+      throw new HttpException('Error', HttpStatus.BAD_REQUEST, {
+        cause: error,
+      });
+    }
   }
 }
