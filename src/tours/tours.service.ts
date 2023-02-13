@@ -12,7 +12,7 @@ export class ToursService {
   async create(createTourDto: CreateTourDto): Promise<Tour> {
     const createdTour = new this.tourModel({
       ...createTourDto,
-      participants: [createTourDto.author_id],
+      participants: [createTourDto.author],
     });
     return createdTour.save();
   }
@@ -21,6 +21,9 @@ export class ToursService {
   async findAll(): Promise<Tour[]> {
     return this.tourModel.find().populate('participants').exec();
   }
+
+  //fill db data
+  //drop db data
 
   //get tour by userId
 

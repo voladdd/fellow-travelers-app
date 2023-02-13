@@ -1,8 +1,11 @@
 import { IsInt, IsString, Max, Min } from 'class-validator';
 
-export class CreateTourDto {
+export class CreateRoadDto {
   @IsString()
-  description: string;
+  placeStart: string;
+
+  @IsString()
+  placeEnd: string;
 
   @IsInt()
   @Min(1)
