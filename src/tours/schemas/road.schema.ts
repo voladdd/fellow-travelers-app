@@ -12,16 +12,25 @@ export class Road {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Place',
   })
-  placeStart: Place;
+  placeRoadStart: Place;
   @Prop({
     required: true,
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Place',
   })
-  placeEnd: Place;
+  placeRoadEnd: Place;
+  @Prop({
+    required: true,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Place',
+  })
+  placeMeeting: Date;
 
   @Prop({ required: true, type: mongoose.Schema.Types.Date })
-  time: Date;
+  timeMeeting: Date;
+
+  @Prop({ required: true, type: mongoose.Schema.Types.Date })
+  timeStart: Date;
 
   @Prop({
     required: true,
