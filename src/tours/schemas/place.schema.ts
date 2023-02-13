@@ -8,8 +8,8 @@ export class Place {
   @Prop({ required: true })
   name: string;
 
-  @Prop()
-  description: string;
+  @Prop({ required: true })
+  address: string;
 }
 
 export const PlaceSchema = SchemaFactory.createForClass(Place);

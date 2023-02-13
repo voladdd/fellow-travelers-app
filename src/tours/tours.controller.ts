@@ -7,7 +7,7 @@ import {
   HttpStatus,
   Post,
 } from '@nestjs/common';
-import { Body } from '@nestjs/common/decorators';
+import { Body, Delete } from '@nestjs/common/decorators';
 
 @Controller('tours')
 export class ToursController {
@@ -24,9 +24,31 @@ export class ToursController {
   }
 
   @Get()
-  async findAll() {
+  async findAllTours() {
     try {
       return await this.toursService.findAll();
+    } catch (error) {
+      throw new HttpException('Error', HttpStatus.BAD_REQUEST, {
+        cause: error,
+      });
+    }
+  }
+
+  @Post('/admin/db')
+  async fillCollections() {
+    try {
+      await this.toursService.fillCollections();
+    } catch (error) {
+      throw new HttpException('Error', HttpStatus.BAD_REQUEST, {
+        cause: error,
+      });
+    }
+  }
+
+  @Delete('/admin/db')
+  async dropCollections() {
+    try {
+      await this.toursService.dropCollections();
     } catch (error) {
       throw new HttpException('Error', HttpStatus.BAD_REQUEST, {
         cause: error,
