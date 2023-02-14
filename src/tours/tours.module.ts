@@ -9,6 +9,9 @@ import { Place, PlaceSchema } from './schemas/place.schema';
 import { Status, StatusSchema } from './schemas/status.schema';
 import { DbCollectionsService } from './services/db-collections.service';
 import { TransportsService } from './services/transports.service';
+import { StatusService } from './services/status.service';
+import { PlacesService } from './services/places.service';
+import { RoadsService } from './services/roads.service';
 
 @Module({
   imports: [
@@ -20,7 +23,14 @@ import { TransportsService } from './services/transports.service';
       { name: Status.name, schema: StatusSchema },
     ]),
   ],
-  providers: [ToursService, DbCollectionsService, TransportsService],
+  providers: [
+    ToursService,
+    DbCollectionsService,
+    TransportsService,
+    StatusService,
+    PlacesService,
+    RoadsService,
+  ],
   controllers: [ToursController],
 })
 export class ToursModule {}

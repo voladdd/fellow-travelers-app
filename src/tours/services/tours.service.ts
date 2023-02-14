@@ -14,25 +14,16 @@ export class ToursService {
       ...createTourDto,
       participants: [createTourDto.author],
     });
-    return createdTour.save();
+    return await createdTour.save();
   }
 
-  //find all
   async findAll(): Promise<Tour[]> {
     return this.tourModel.find().populate('participants').exec();
   }
 
-  // async findAllTransports(): Promise<Transport[]> {
-  //   return this.transportModel.find();
-  // }
-
-  // async findAllPlaces(): Promise<Place[]> {
-  //   return this.placeModel.find();
-  // }
-
-  // async findAllStatus(): Promise<Status[]> {
-  //   return this.statusModel.find();
-  // }
+  async findOneById(id: string) {
+    return this.tourModel.findById(id);
+  }
 
   //get tour by userId
 

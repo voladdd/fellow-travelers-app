@@ -1,0 +1,17 @@
+import { Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { Place, PlaceDocument } from '../schemas/place.schema';
+
+@Injectable()
+export class PlacesService {
+  constructor(
+    @InjectModel(Place.name)
+    private placeModel: Model<PlaceDocument>,
+  ) {}
+
+  //find all
+  async findAll(): Promise<Place[]> {
+    return this.placeModel.find();
+  }
+}
