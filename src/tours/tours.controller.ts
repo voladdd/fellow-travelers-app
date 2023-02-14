@@ -1,5 +1,7 @@
+import { TransportsService } from './services/transports.service';
+import { DbCollectionsService } from './services/db-collections.service';
 import { CreateTourDto } from './dto/create-tour.dto';
-import { ToursService } from './tours.service';
+import { ToursService } from './services/tours.service';
 import {
   Controller,
   Get,
@@ -11,7 +13,12 @@ import { Body, Delete } from '@nestjs/common/decorators';
 
 @Controller('tours')
 export class ToursController {
-  constructor(private toursService: ToursService) {}
+  constructor(
+    private toursService: ToursService,
+    private dbCollectionsService: DbCollectionsService,
+    private transportsService: TransportsService,
+  ) {}
+
   @Post()
   async createTour(@Body() createTourDto: CreateTourDto) {
     try {
@@ -23,8 +30,9 @@ export class ToursController {
     }
   }
 
+  //Get requests
   @Get()
-  async findAllTours() {
+  async toursfindAll() {
     try {
       return await this.toursService.findAll();
     } catch (error) {
@@ -34,10 +42,54 @@ export class ToursController {
     }
   }
 
+  @Get('/transports')
+  async transportsfindAll() {
+    try {
+      return await this.transportsService.findAll();
+    } catch (error) {
+      throw new HttpException('Error', HttpStatus.BAD_REQUEST, {
+        cause: error,
+      });
+    }
+  }
+
+  // @Get('/places')
+  // async findAllPlaces() {
+  //   try {
+  //     return await this.toursService.findAllPlaces();
+  //   } catch (error) {
+  //     throw new HttpException('Error', HttpStatus.BAD_REQUEST, {
+  //       cause: error,
+  //     });
+  //   }
+  // }
+
+  // @Get('/status')
+  // async findAllStatus() {
+  //   try {
+  //     return await this.toursService.findAllStatus();
+  //   } catch (error) {
+  //     throw new HttpException('Error', HttpStatus.BAD_REQUEST, {
+  //       cause: error,
+  //     });
+  //   }
+  // }
+
+  // @Get('/status')
+  // async findTourById() {
+  //   try {
+  //     return await this.toursService.findAllStatus();
+  //   } catch (error) {
+  //     throw new HttpException('Error', HttpStatus.BAD_REQUEST, {
+  //       cause: error,
+  //     });
+  //   }
+  // }
+
   @Post('/admin/db')
   async fillCollections() {
     try {
-      await this.toursService.fillCollections();
+      await this.dbCollectionsService.fillSampleData();
     } catch (error) {
       throw new HttpException('Error', HttpStatus.BAD_REQUEST, {
         cause: error,
@@ -48,7 +100,7 @@ export class ToursController {
   @Delete('/admin/db')
   async dropCollections() {
     try {
-      await this.toursService.dropCollections();
+      await this.dbCollectionsService.dropAllData();
     } catch (error) {
       throw new HttpException('Error', HttpStatus.BAD_REQUEST, {
         cause: error,
