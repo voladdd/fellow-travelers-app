@@ -24,7 +24,7 @@ export class Road {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Place',
   })
-  placeMeeting: Date;
+  placeMeeting: Place;
 
   @Prop({ required: true, type: mongoose.Schema.Types.Date })
   timeMeeting: Date;

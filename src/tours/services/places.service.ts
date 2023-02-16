@@ -1,3 +1,4 @@
+import { CreatePlaceDto } from './../dto/create-place.dto';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
@@ -13,5 +14,10 @@ export class PlacesService {
   //find all
   async findAll(): Promise<Place[]> {
     return this.placeModel.find();
+  }
+
+  async create(createPlaceDto: CreatePlaceDto): Promise<Place> {
+    const place = new this.placeModel(createPlaceDto);
+    return await place.save();
   }
 }

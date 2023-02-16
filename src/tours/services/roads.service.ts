@@ -14,4 +14,12 @@ export class RoadsService {
   async findAll(): Promise<Road[]> {
     return this.roadModel.find();
   }
+
+  // async create(createRoadDto: CreateRoadDto): Promise<Road> {
+  //   // const createdTour = new this.tourModel({
+  //   //   ...createTourDto,
+  //   //   participants: [createTourDto.author],
+  //   // });
+  //   // return await createdTour.save();
+  // }
 }
