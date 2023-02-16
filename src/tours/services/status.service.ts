@@ -10,7 +10,6 @@ export class StatusService {
     private statusModel: Model<StatusDocument>,
   ) {}
 
-  //find all
   async findAll(): Promise<Status[]> {
     return await this.statusModel.find();
   }

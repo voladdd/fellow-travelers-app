@@ -1,8 +1,10 @@
+import { StatusController } from './controllers/status.controller';
+import { PlacesController } from './controllers/places.contoller';
 import { Module } from '@nestjs/common';
 import { ToursService } from './services/tours.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Tour, TourSchema } from './schemas/tour.schema';
-import { ToursController } from './tours.controller';
+import { ToursController } from './controllers/tours.controller';
 import { Road, RoadSchema } from './schemas/road.schema';
 import { Transport, TransportSchema } from './schemas/transport.schema';
 import { Place, PlaceSchema } from './schemas/place.schema';
@@ -12,6 +14,9 @@ import { TransportsService } from './services/transports.service';
 import { StatusService } from './services/status.service';
 import { PlacesService } from './services/places.service';
 import { RoadsService } from './services/roads.service';
+import { DbCollectionsController } from './controllers/db-collections.controller';
+import { TransportsController } from './controllers/transports.controller';
+import { RoadsController } from './controllers/roads.controller';
 
 @Module({
   imports: [
@@ -31,6 +36,14 @@ import { RoadsService } from './services/roads.service';
     PlacesService,
     RoadsService,
   ],
-  controllers: [ToursController],
+  //Need to specify controllers from longest paths to shortest
+  controllers: [
+    DbCollectionsController,
+    TransportsController,
+    PlacesController,
+    StatusController,
+    RoadsController,
+    ToursController,
+  ],
 })
 export class ToursModule {}

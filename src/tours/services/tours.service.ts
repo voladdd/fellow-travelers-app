@@ -8,7 +8,6 @@ import { CreateTourDto } from '../dto/create-tour.dto';
 export class ToursService {
   constructor(@InjectModel(Tour.name) private tourModel: Model<TourDocument>) {}
 
-  //create tour
   async create(createTourDto: CreateTourDto): Promise<Tour> {
     const createdTour = new this.tourModel({
       ...createTourDto,

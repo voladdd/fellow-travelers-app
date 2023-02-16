@@ -11,7 +11,6 @@ export class RoadsService {
     private roadModel: Model<RoadDocument>,
   ) {}
 
-  //find all
   async findAll(): Promise<Road[]> {
     return this.roadModel.find();
   }

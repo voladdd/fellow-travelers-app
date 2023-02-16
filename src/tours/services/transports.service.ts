@@ -10,7 +10,6 @@ export class TransportsService {
     private transportModel: Model<TransportDocument>,
   ) {}
 
-  //find all
   async findAll(): Promise<Transport[]> {
     return await this.transportModel.find();
   }
