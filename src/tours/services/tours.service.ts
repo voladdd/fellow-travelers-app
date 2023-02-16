@@ -18,11 +18,11 @@ export class ToursService {
   }
 
   async findAll(): Promise<Tour[]> {
-    return this.tourModel.find().populate('participants').exec();
+    return await this.tourModel.find().populate('participants').exec();
   }
 
   async findOneById(id: string) {
-    return this.tourModel.findById(id);
+    return await this.tourModel.findById(id);
   }
 
   //get tour by userId

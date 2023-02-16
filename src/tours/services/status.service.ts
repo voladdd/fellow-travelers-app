@@ -12,6 +12,6 @@ export class StatusService {
 
   //find all
   async findAll(): Promise<Status[]> {
-    return this.statusModel.find();
+    return await this.statusModel.find();
   }
 }

@@ -14,6 +14,7 @@ import {
 import { Body, Delete, Param } from '@nestjs/common/decorators';
 import { PlacesService } from './services/places.service';
 import { CreatePlaceDto } from './dto/create-place.dto';
+import { CreateRoadDto } from './dto/create-road.dto';
 
 @Controller('tours')
 export class ToursController {
@@ -90,6 +91,16 @@ export class ToursController {
   async roadsFindAll() {
     try {
       return await this.roadsService.findAll();
+    } catch (error) {
+      console.log(error._message);
+      throw new HttpException('Error', HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  @Post('/roads')
+  async roadsCreate(@Body() createRoadDto: CreateRoadDto) {
+    try {
+      return await this.roadsService.create(createRoadDto);
     } catch (error) {
       console.log(error._message);
       throw new HttpException('Error', HttpStatus.BAD_REQUEST);

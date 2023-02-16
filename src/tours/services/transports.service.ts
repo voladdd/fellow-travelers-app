@@ -12,6 +12,6 @@ export class TransportsService {
 
   //find all
   async findAll(): Promise<Transport[]> {
-    return this.transportModel.find();
+    return await this.transportModel.find();
   }
 }

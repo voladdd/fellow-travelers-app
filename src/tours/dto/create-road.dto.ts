@@ -1,17 +1,21 @@
-import { IsInt, IsString, Max, Min } from 'class-validator';
+import { IsDateString, IsString } from 'class-validator';
 
 export class CreateRoadDto {
   @IsString()
-  placeStart: string;
+  placeRoadStart: string;
 
   @IsString()
-  placeEnd: string;
+  placeRoadEnd: string;
 
-  @IsInt()
-  @Min(1)
-  @Max(5)
-  maxPeopleCount: number;
+  @IsString()
+  placeMeeting: string;
 
-  @IsInt()
-  author: number;
+  @IsDateString()
+  timeMeeting: Date;
+
+  @IsDateString()
+  timeStart: Date;
+
+  @IsString()
+  transport: string;
 }

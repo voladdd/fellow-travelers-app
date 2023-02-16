@@ -13,7 +13,9 @@ export class PlacesService {
 
   //find all
   async findAll(): Promise<Place[]> {
-    return this.placeModel.find();
+    const res = await this.placeModel.find();
+    console.log('empty' + res);
+    return res;
   }
 
   async create(createPlaceDto: CreatePlaceDto): Promise<Place> {
