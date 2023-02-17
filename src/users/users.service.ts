@@ -9,16 +9,16 @@ export class UsersService {
   constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
 
   async create(createUserDto: CreateUserDto): Promise<User> {
-    const createdUser = new this.userModel(createUserDto);
-    return createdUser.save();
+    const user = new this.userModel(createUserDto);
+    return await user.save();
   }
 
-  async findById(id: number): Promise<User | null> {
-    const findedUser = this.userModel.findById(id);
-    return findedUser;
+  async findByTgId(tgId: number): Promise<User | null> {
+    const user = await this.userModel.findOne({ tgId });
+    return user;
   }
 
   async findAll(): Promise<User[]> {
-    return this.userModel.find().exec();
+    return await this.userModel.find().exec();
   }
 }
