@@ -12,7 +12,13 @@ export class RoadsService {
   ) {}
 
   async findAll(): Promise<Road[]> {
-    return this.roadModel.find();
+    return this.roadModel
+      .find()
+      .populate('placeRoadStart')
+      .populate('placeRoadEnd')
+      .populate('placeMeeting')
+      .populate('transport')
+      .exec();
   }
 
   async create(createRoadDto: CreateRoadDto): Promise<Road> {

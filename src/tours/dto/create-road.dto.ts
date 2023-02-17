@@ -1,4 +1,5 @@
-import { IsDateString, IsString } from 'class-validator';
+import { Transform } from 'class-transformer';
+import { IsString, MinDate } from 'class-validator';
 
 export class CreateRoadDto {
   @IsString()
@@ -10,10 +11,12 @@ export class CreateRoadDto {
   @IsString()
   placeMeeting: string;
 
-  @IsDateString()
+  @Transform(({ value }) => new Date(value))
+  @MinDate(() => new Date())
   timeMeeting: Date;
 
-  @IsDateString()
+  @Transform(({ value }) => new Date(value))
+  @MinDate(() => new Date())
   timeStart: Date;
 
   @IsString()
