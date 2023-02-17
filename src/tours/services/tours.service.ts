@@ -12,12 +12,29 @@ export class ToursService {
     const createdTour = new this.tourModel({
       ...createTourDto,
       participants: [createTourDto.author],
+      status: '63ea6c2ddf57c8a68d5913b8',
     });
     return await createdTour.save();
   }
 
   async findAll(): Promise<Tour[]> {
-    return await this.tourModel.find().populate('participants').exec();
+    return await this.tourModel
+      .find()
+      .populate([
+        { path: 'author' },
+        { path: 'participants' },
+        { path: 'status' },
+        {
+          path: 'road',
+          populate: [
+            { path: 'placeRoadStart', model: 'Place' },
+            { path: 'placeRoadEnd', model: 'Place' },
+            { path: 'placeMeeting', model: 'Place' },
+            { path: 'transport', model: 'Transport' },
+          ],
+        },
+      ])
+      .exec();
   }
 
   async findOneById(id: string) {

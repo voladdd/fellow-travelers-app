@@ -15,13 +15,13 @@ export class Tour {
   description: string;
 
   @Prop({
-    type: mongoose.Schema.Types.Number,
+    type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
     required: true,
   })
   author: User;
 
-  @Prop({ type: [{ type: mongoose.Schema.Types.Number, ref: 'User' }] })
+  @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }] })
   participants: User[];
 
   @Prop({

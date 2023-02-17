@@ -9,8 +9,8 @@ export class CreateTourDto {
   @IsString()
   description: string;
 
-  @IsInt()
-  author: number;
+  @IsString()
+  author: string;
 
   @IsString()
   road: string;
