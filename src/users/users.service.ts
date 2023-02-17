@@ -18,6 +18,11 @@ export class UsersService {
     return user;
   }
 
+  async isUserExists(_id: string): Promise<boolean> {
+    const user = await this.userModel.exists({ _id });
+    return user ? true : false;
+  }
+
   async findAll(): Promise<User[]> {
     return await this.userModel.find().exec();
   }

@@ -25,4 +25,9 @@ export class RoadsService {
     const road = new this.roadModel(createRoadDto);
     return await road.save();
   }
+
+  async isRoadExists(_id: string): Promise<boolean> {
+    const road = await this.roadModel.exists({ _id });
+    return road ? true : false;
+  }
 }

@@ -17,6 +17,8 @@ import { RoadsService } from './services/roads.service';
 import { DbCollectionsController } from './controllers/db-collections.controller';
 import { TransportsController } from './controllers/transports.controller';
 import { RoadsController } from './controllers/roads.controller';
+import { UsersService } from 'src/users/users.service';
+import { User, UserSchema } from 'src/users/schemas/user.schema';
 
 @Module({
   imports: [
@@ -26,9 +28,11 @@ import { RoadsController } from './controllers/roads.controller';
       { name: Transport.name, schema: TransportSchema },
       { name: Place.name, schema: PlaceSchema },
       { name: Status.name, schema: StatusSchema },
+      { name: User.name, schema: UserSchema },
     ]),
   ],
   providers: [
+    UsersService,
     ToursService,
     DbCollectionsService,
     TransportsService,

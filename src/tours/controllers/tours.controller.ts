@@ -16,10 +16,12 @@ export class ToursController {
   @Post()
   async create(@Body() createTourDto: CreateTourDto) {
     try {
-      await this.toursService.create(createTourDto);
+      return await this.toursService.create(createTourDto);
     } catch (error) {
-      console.log(error._message);
-      throw new HttpException('Error', HttpStatus.BAD_REQUEST);
+      console.log(error);
+      throw new HttpException('Error', HttpStatus.BAD_REQUEST, {
+        cause: new Error(error),
+      });
     }
   }
 
