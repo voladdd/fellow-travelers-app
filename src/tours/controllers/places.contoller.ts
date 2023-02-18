@@ -18,7 +18,7 @@ export class PlacesController {
     try {
       return await this.placesService.findAll();
     } catch (error) {
-      console.log(error._message);
+      console.log(error);
       throw new HttpException('Error', HttpStatus.BAD_REQUEST);
     }
   }
@@ -28,7 +28,7 @@ export class PlacesController {
     try {
       return await this.placesService.create(createPlaceDto);
     } catch (error) {
-      console.log(error._message);
+      console.log(error);
       throw new HttpException('Error', HttpStatus.BAD_REQUEST);
     }
   }

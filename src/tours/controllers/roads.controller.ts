@@ -18,7 +18,7 @@ export class RoadsController {
     try {
       return await this.roadsService.findAll();
     } catch (error) {
-      console.log(error._message);
+      console.log(error);
       throw new HttpException('Error', HttpStatus.BAD_REQUEST);
     }
   }
@@ -28,7 +28,7 @@ export class RoadsController {
     try {
       return await this.roadsService.create(createRoadDto);
     } catch (error) {
-      console.log(error._message);
+      console.log(error);
       throw new HttpException('Error', HttpStatus.BAD_REQUEST);
     }
   }

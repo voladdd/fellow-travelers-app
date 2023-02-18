@@ -18,7 +18,7 @@ export class TransportsController {
     try {
       return await this.transportsService.findAll();
     } catch (error) {
-      console.log(error._message);
+      console.log(error);
       throw new HttpException('Error', HttpStatus.BAD_REQUEST);
     }
   }
@@ -28,7 +28,7 @@ export class TransportsController {
     try {
       return await this.transportsService.create(createTransportDto);
     } catch (error) {
-      console.log(error._message);
+      console.log(error);
       throw new HttpException('Error', HttpStatus.BAD_REQUEST);
     }
   }

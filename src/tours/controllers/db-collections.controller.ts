@@ -11,7 +11,7 @@ export class DbCollectionsController {
     try {
       await this.dbCollectionsService.fillSampleData();
     } catch (error) {
-      console.log(error._message);
+      console.log(error);
       throw new HttpException('Error', HttpStatus.BAD_REQUEST);
     }
   }
@@ -21,7 +21,7 @@ export class DbCollectionsController {
     try {
       await this.dbCollectionsService.dropAllData();
     } catch (error) {
-      console.log(error._message);
+      console.log(error);
       throw new HttpException('Error', HttpStatus.BAD_REQUEST);
     }
   }

@@ -10,7 +10,7 @@ export class StatusController {
     try {
       return await this.statusService.findAll();
     } catch (error) {
-      console.log(error._message);
+      console.log(error);
       throw new HttpException('Error', HttpStatus.BAD_REQUEST);
     }
   }

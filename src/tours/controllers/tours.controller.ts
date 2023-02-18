@@ -1,4 +1,7 @@
+import { Schema } from '@nestjs/mongoose';
+import mongoose, { ObjectId, Types } from 'mongoose';
 import { CreateTourDto } from '../dto/create-tour.dto';
+import { JoinTourDto } from '../dto/join-tour.dto';
 import { ToursService } from '../services/tours.service';
 import {
   Controller,
@@ -8,6 +11,7 @@ import {
   Post,
 } from '@nestjs/common';
 import { Body, Param } from '@nestjs/common/decorators';
+import { toMongoObjectIdPipe } from '../utils/pipes/toMongoObjectId.pipe';
 
 @Controller('tours')
 export class ToursController {
@@ -25,12 +29,25 @@ export class ToursController {
     }
   }
 
+  @Post(':id/join')
+  async joinTour(
+    @Param('id', toMongoObjectIdPipe) id: any,
+    @Body() joinTourDto: JoinTourDto,
+  ) {
+    try {
+      return await this.toursService.joinTour(id, joinTourDto);
+    } catch (error) {
+      console.log(error);
+      throw new HttpException('Error', HttpStatus.BAD_REQUEST);
+    }
+  }
+
   @Get(':id')
-  async findOneById(@Param('id') id: string) {
+  async findOneById(@Param('id', toMongoObjectIdPipe) id: any) {
     try {
       return await this.toursService.findOneById(id);
     } catch (error) {
-      console.log(error._message);
+      console.log(error);
       throw new HttpException('Error', HttpStatus.BAD_REQUEST);
     }
   }
@@ -40,7 +57,7 @@ export class ToursController {
     try {
       return await this.toursService.findAll();
     } catch (error) {
-      console.log(error._message);
+      console.log(error);
       throw new HttpException('Error', HttpStatus.BAD_REQUEST);
     }
   }

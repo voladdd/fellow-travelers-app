@@ -3,8 +3,9 @@ import { UsersService } from './../../users/users.service';
 import { Injectable } from '@nestjs/common';
 import { Tour, TourDocument } from '../schemas/tour.schema';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { CreateTourDto } from '../dto/create-tour.dto';
+import { JoinTourDto } from '../dto/join-tour.dto';
 
 @Injectable()
 export class ToursService {
@@ -47,9 +48,9 @@ export class ToursService {
     return await this.tourModel
       .find()
       .populate([
-        { path: 'author' },
-        { path: 'participants' },
-        { path: 'status' },
+        { path: 'author', model: 'User' },
+        { path: 'participants', model: 'User' },
+        { path: 'status', model: 'Status' },
         {
           path: 'road',
           populate: [
@@ -63,8 +64,29 @@ export class ToursService {
       .exec();
   }
 
-  async findOneById(id: string) {
+  async findOneById(id: Types.ObjectId) {
     return await this.tourModel.findById(id);
+  }
+
+  async joinTour(tourId: Types.ObjectId, joinTourDto: JoinTourDto) {
+    //find tour
+    const tour = await this.tourModel.findById(tourId);
+    if (!tour) {
+      throw new Error('Tour is not founded');
+    }
+    //find user
+    const user = await this.usersService.findById(joinTourDto.userId);
+    if (!user) {
+      throw new Error('User is not founded');
+    }
+    //check if user already in tour
+    if (tour.participants.some((user) => user._id == joinTourDto.userId)) {
+      throw new Error('User is already joined');
+    }
+    //add user to tour
+    tour.participants.push(user);
+    await tour.save();
+    return tour.toJSON();
   }
 
   //get tour by userId

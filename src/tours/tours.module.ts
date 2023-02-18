@@ -19,6 +19,8 @@ import { TransportsController } from './controllers/transports.controller';
 import { RoadsController } from './controllers/roads.controller';
 import { UsersService } from 'src/users/users.service';
 import { User, UserSchema } from 'src/users/schemas/user.schema';
+import { toMongoObjectIdPipe } from './utils/pipes/toMongoObjectId.pipe';
+import { APP_PIPE } from '@nestjs/core';
 
 @Module({
   imports: [
