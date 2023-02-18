@@ -30,12 +30,25 @@ export class ToursController {
   }
 
   @Post(':id/join')
-  async joinTour(
+  async join(
     @Param('id', toMongoObjectIdPipe) id: any,
     @Body() joinTourDto: JoinTourDto,
   ) {
     try {
       return await this.toursService.joinTour(id, joinTourDto);
+    } catch (error) {
+      console.log(error);
+      throw new HttpException('Error', HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  @Post(':id/leave')
+  async leave(
+    @Param('id', toMongoObjectIdPipe) id: any,
+    @Body() joinTourDto: JoinTourDto,
+  ) {
+    try {
+      return await this.toursService.leaveTour(id, joinTourDto);
     } catch (error) {
       console.log(error);
       throw new HttpException('Error', HttpStatus.BAD_REQUEST);

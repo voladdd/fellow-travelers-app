@@ -89,6 +89,72 @@ export class ToursService {
     return tour.toJSON();
   }
 
+  async leaveTour(tourId: Types.ObjectId, joinTourDto: JoinTourDto) {
+    //find tour
+    const tour = await this.tourModel.findById(tourId);
+    if (!tour) {
+      throw new Error('Tour is not founded');
+    }
+    //find user
+    const user = await this.usersService.findById(joinTourDto.userId);
+    if (!user) {
+      throw new Error('User is not founded');
+    }
+    //check if user already in tour
+    let userIndex: number;
+    if (
+      !tour.participants.some((user, index) => {
+        userIndex = index;
+        return user._id == joinTourDto.userId;
+      })
+    ) {
+      throw new Error('User is not into tour');
+    }
+    //remove user from tour
+    if (userIndex) {
+      tour.participants = [
+        ...tour.participants.slice(0, userIndex),
+        ...tour.participants.slice(userIndex + 1),
+      ];
+    }
+    await tour.save();
+
+    return tour.toJSON();
+  }
+
+  async kickFromTour(tourId: Types.ObjectId, joinTourDto: JoinTourDto) {
+    //find tour
+    const tour = await this.tourModel.findById(tourId);
+    if (!tour) {
+      throw new Error('Tour is not founded');
+    }
+    //find user
+    const user = await this.usersService.findById(joinTourDto.userId);
+    if (!user) {
+      throw new Error('User is not founded');
+    }
+    //check if user already in tour
+    let userIndex: number;
+    if (
+      !tour.participants.some((user, index) => {
+        userIndex = index;
+        return user._id == joinTourDto.userId;
+      })
+    ) {
+      throw new Error('User is not into tour');
+    }
+    //remove user from tour
+    if (userIndex) {
+      tour.participants = [
+        ...tour.participants.slice(0, userIndex),
+        ...tour.participants.slice(userIndex + 1),
+      ];
+    }
+    await tour.save();
+
+    return tour.toJSON();
+  }
+
   //get tour by userId
 
   //update tour
