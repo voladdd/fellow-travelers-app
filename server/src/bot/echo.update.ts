@@ -16,27 +16,41 @@ export class EchoUpdate {
     //check if user already inited
     const res = await this.usersService.findByTgId(tgId);
     if (!res) {
-      // console.log('user created' + tgId);
       await this.usersService.create({
         tgId,
         name,
         firstName,
       });
-    } else {
-      // console.log('user alreay inited');
     }
 
-    // console.log(userId, userName);
+    //reply markup
+    await ctx.replyWithMarkdownV2(
+      `\*Ну что народ, погнали 🚕* \n\nЧтобы найти себе попутчиков, жми на кнопку ниже \\!`,
+      {
+        parse_mode: 'MarkdownV2',
+        reply_markup: {
+          inline_keyboard: [
+            [
+              {
+                text: 'Забить местечко',
+                web_app: { url: process.env.WEB_APP_URL },
+              },
+            ],
+          ],
+        },
+      },
+    );
   }
 
-  @Hears('weather')
+  @Hears('Какова погода')
   async weatherForecast(@Ctx() ctx: TelegrafContext) {
-    await ctx.replyWithMarkdownV2('InlineKeyboardMarkup', {
+    await ctx.replyWithMarkdownV2(`\*Такова погода 🌞*`, {
+      parse_mode: 'MarkdownV2',
       reply_markup: {
         inline_keyboard: [
           [
             {
-              text: 'open',
+              text: 'Посмотреть',
               web_app: { url: 'https://voladdd.github.io/weather-forecast/' },
             },
           ],
