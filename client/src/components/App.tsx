@@ -11,7 +11,6 @@ function App() {
 
   return (
     <div className="App">
-      <p>{tg.initData}</p>
       <button onClick={onClose}>Close</button>
     </div>
   );
