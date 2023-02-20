@@ -10,8 +10,9 @@ import {
   HttpStatus,
   Post,
 } from '@nestjs/common';
-import { Body, Param } from '@nestjs/common/decorators';
+import { Body, Param, Req } from '@nestjs/common/decorators';
 import { toMongoObjectIdPipe } from '../utils/pipes/toMongoObjectId.pipe';
+import { request } from 'express';
 
 @Controller('tours')
 export class ToursController {
@@ -66,8 +67,9 @@ export class ToursController {
   }
 
   @Get()
-  async findAll() {
+  async findAll(@Req() request: Request) {
     try {
+      console.log(request.headers);
       return await this.toursService.findAll();
     } catch (error) {
       console.log(error);
