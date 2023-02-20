@@ -1,4 +1,4 @@
-import { verifyTelegramWebAppData } from './../tours/utils/other/verifyTelegramWebAppData';
+import { verifyTelegramWebAppData } from './utils/other/verifyTelegramWebAppData';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
