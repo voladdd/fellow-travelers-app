@@ -1,5 +1,5 @@
+import { verifyTelegramWebAppData } from './../tours/utils/other/verifyTelegramWebAppData';
 import { Injectable } from '@nestjs/common';
-import { createHmac } from 'node:crypto';
 
 @Injectable()
 export class AuthService {
@@ -12,18 +12,7 @@ export class AuthService {
   //     }
   //     return null;
   //   }
-  async validateUserData(data_check_string: string): Promise<any> {
-    const data_check_string_hash = '123';
-    const secret_key = createHmac('sha256', process.env.TELEGRAM_BOT_TOKEN)
-      .update('WebAppData')
-      .digest('hex');
-    const hash = createHmac('sha256', secret_key)
-      .update(data_check_string)
-      .digest('hex');
-
-    if (data_check_string_hash === hash) {
-      return true;
-    }
-    return false;
+  async validateUserData(telegramInitData: string): Promise<any> {
+    return await verifyTelegramWebAppData(telegramInitData);
   }
 }
