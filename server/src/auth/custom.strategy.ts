@@ -10,7 +10,7 @@ export class CustomStrategy extends PassportStrategy(Strategy, 'custom') {
   }
 
   async validate(req: Request): Promise<any> {
-    const data = req.headers['user-data'];
+    const data = req.headers['init-data'];
     if (!data) {
       throw new UnauthorizedException();
     }
