@@ -1,8 +1,23 @@
 import { createHmac } from 'node:crypto';
 
+interface UserField {
+  id: number;
+  first_name: string;
+  last_name: string;
+  username: string;
+  language_code: string;
+}
+
+const parseFieldValue = (fieldsArray: string[], fieldName: string) => {
+  const fieldIndex = fieldsArray.findIndex((str) =>
+    str.startsWith(`${fieldName}=`),
+  );
+  return fieldsArray.splice(fieldIndex)[0].split('=')[1];
+};
+
 export const verifyTelegramWebAppData = async (
   telegramInitData: string,
-): Promise<boolean> => {
+): Promise<UserField | null> => {
   // The data is a query string, which is composed of a series of field-value pairs.
   const encoded = decodeURIComponent(telegramInitData);
 
@@ -13,8 +28,7 @@ export const verifyTelegramWebAppData = async (
 
   // Data-check-string is a chain of all received fields'.
   const arr = encoded.split('&');
-  const hashIndex = arr.findIndex((str) => str.startsWith('hash='));
-  const hash = arr.splice(hashIndex)[0].split('=')[1];
+  const hash = parseFieldValue(arr, 'hash');
   // sorted alphabetically
   arr.sort((a, b) => a.localeCompare(b));
   // in the format key=<value> with a line feed character ('\n', 0x0A) used as separator
@@ -28,5 +42,10 @@ export const verifyTelegramWebAppData = async (
 
   // if hash are equal the data may be used on your server.
   // Complex data types are represented as JSON-serialized objects.
-  return _hash === hash;
+  if (_hash === hash) {
+    //return user object
+    const user = parseFieldValue(arr, 'user');
+    return JSON.parse(user);
+  }
+  return null;
 };
