@@ -1,7 +1,6 @@
-import { Schema } from '@nestjs/mongoose';
-import mongoose, { ObjectId, Types } from 'mongoose';
+import { JoinTourDto } from './../dto/join-tour.dto';
+import { JwtAuthGuard } from './../../auth/jwt-auth.guard';
 import { CreateTourDto } from '../dto/create-tour.dto';
-import { JoinTourDto } from '../dto/join-tour.dto';
 import { ToursService } from '../services/tours.service';
 import {
   Controller,
@@ -10,10 +9,11 @@ import {
   HttpStatus,
   Post,
 } from '@nestjs/common';
-import { Body, Param, Req } from '@nestjs/common/decorators';
+import { Body, Param, UseGuards, Request } from '@nestjs/common/decorators';
 import { toMongoObjectIdPipe } from '../utils/pipes/toMongoObjectId.pipe';
-import { request } from 'express';
 
+//using guard to provide valid auth data about user via bearer, who sended this request
+@UseGuards(JwtAuthGuard)
 @Controller('tours')
 export class ToursController {
   constructor(private toursService: ToursService) {}
@@ -31,12 +31,10 @@ export class ToursController {
   }
 
   @Post(':id/join')
-  async join(
-    @Param('id', toMongoObjectIdPipe) id: any,
-    @Body() joinTourDto: JoinTourDto,
-  ) {
+  async join(@Request() req: any, @Param('id', toMongoObjectIdPipe) id: any) {
     try {
-      return await this.toursService.joinTour(id, joinTourDto);
+      const { user }: { user: JoinTourDto } = req;
+      return await this.toursService.joinTour(id, user);
     } catch (error) {
       console.log(error);
       throw new HttpException('Error', HttpStatus.BAD_REQUEST);
@@ -44,12 +42,9 @@ export class ToursController {
   }
 
   @Post(':id/leave')
-  async leave(
-    @Param('id', toMongoObjectIdPipe) id: any,
-    @Body() joinTourDto: JoinTourDto,
-  ) {
+  async leave(@Request() req, @Param('id', toMongoObjectIdPipe) id: any) {
     try {
-      return await this.toursService.leaveTour(id, joinTourDto);
+      return await this.toursService.leaveTour(id, req.user);
     } catch (error) {
       console.log(error);
       throw new HttpException('Error', HttpStatus.BAD_REQUEST);
@@ -67,9 +62,8 @@ export class ToursController {
   }
 
   @Get()
-  async findAll(@Req() request: Request) {
+  async findAll() {
     try {
-      console.log(request.headers);
       return await this.toursService.findAll();
     } catch (error) {
       console.log(error);

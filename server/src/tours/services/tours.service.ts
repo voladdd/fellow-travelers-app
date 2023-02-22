@@ -80,7 +80,7 @@ export class ToursService {
       throw new Error('User is not founded');
     }
     //check if user already in tour
-    if (tour.participants.some((user) => user._id === joinTourDto.userId)) {
+    if (tour.participants.some((user) => user._id == joinTourDto.userId)) {
       throw new Error('User is already joined');
     }
     //add user to tour
@@ -105,7 +105,7 @@ export class ToursService {
     if (
       !tour.participants.some((user, index) => {
         userIndex = index;
-        return user._id === joinTourDto.userId;
+        return user._id == joinTourDto.userId;
       })
     ) {
       throw new Error('User is not into tour');
@@ -138,7 +138,7 @@ export class ToursService {
     if (
       !tour.participants.some((user, index) => {
         userIndex = index;
-        return user._id === joinTourDto.userId;
+        return user._id == joinTourDto.userId;
       })
     ) {
       throw new Error('User is not into tour');
