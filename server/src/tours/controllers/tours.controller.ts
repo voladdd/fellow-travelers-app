@@ -8,9 +8,17 @@ import {
   HttpException,
   HttpStatus,
   Post,
+  ValidationPipe,
 } from '@nestjs/common';
-import { Body, Param, UseGuards, Request } from '@nestjs/common/decorators';
+import {
+  Body,
+  Param,
+  UseGuards,
+  Request,
+  UsePipes,
+} from '@nestjs/common/decorators';
 import { toMongoObjectIdPipe } from '../utils/pipes/toMongoObjectId.pipe';
+import { User } from '../../utils/user.decorator';
 
 //using guard to provide valid auth data about user via bearer, who sended this request
 @UseGuards(JwtAuthGuard)
@@ -31,10 +39,12 @@ export class ToursController {
   }
 
   @Post(':id/join')
-  async join(@Request() req: any, @Param('id', toMongoObjectIdPipe) id: any) {
+  async join(
+    @User('userId', toMongoObjectIdPipe) userId: any,
+    @Param('id', toMongoObjectIdPipe) id: any,
+  ) {
     try {
-      const { user }: { user: JoinTourDto } = req;
-      return await this.toursService.joinTour(id, user);
+      return await this.toursService.joinTour(id, userId);
     } catch (error) {
       console.log(error);
       throw new HttpException('Error', HttpStatus.BAD_REQUEST);
@@ -42,9 +52,12 @@ export class ToursController {
   }
 
   @Post(':id/leave')
-  async leave(@Request() req, @Param('id', toMongoObjectIdPipe) id: any) {
+  async leave(
+    @User('userId', toMongoObjectIdPipe) userId: any,
+    @Param('id', toMongoObjectIdPipe) id: any,
+  ) {
     try {
-      return await this.toursService.leaveTour(id, req.user);
+      return await this.toursService.leaveTour(id, userId);
     } catch (error) {
       console.log(error);
       throw new HttpException('Error', HttpStatus.BAD_REQUEST);

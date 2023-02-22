@@ -68,19 +68,19 @@ export class ToursService {
     return await this.tourModel.findById(id);
   }
 
-  async joinTour(tourId: Types.ObjectId, joinTourDto: JoinTourDto) {
+  async joinTour(tourId: Types.ObjectId, userId: Types.ObjectId) {
     //find tour
     const tour = await this.tourModel.findById(tourId);
     if (!tour) {
       throw new Error('Tour is not founded');
     }
     //find user
-    const user = await this.usersService.findById(joinTourDto.userId);
+    const user = await this.usersService.findById(userId);
     if (!user) {
       throw new Error('User is not founded');
     }
     //check if user already in tour
-    if (tour.participants.some((user) => user._id == joinTourDto.userId)) {
+    if (tour.participants.some((user) => user._id.equals(userId))) {
       throw new Error('User is already joined');
     }
     //add user to tour
@@ -89,14 +89,14 @@ export class ToursService {
     return tour.toJSON();
   }
 
-  async leaveTour(tourId: Types.ObjectId, joinTourDto: JoinTourDto) {
+  async leaveTour(tourId: Types.ObjectId, userId: Types.ObjectId) {
     //find tour
     const tour = await this.tourModel.findById(tourId);
     if (!tour) {
       throw new Error('Tour is not founded');
     }
     //find user
-    const user = await this.usersService.findById(joinTourDto.userId);
+    const user = await this.usersService.findById(userId);
     if (!user) {
       throw new Error('User is not founded');
     }
@@ -105,7 +105,7 @@ export class ToursService {
     if (
       !tour.participants.some((user, index) => {
         userIndex = index;
-        return user._id == joinTourDto.userId;
+        return user._id.equals(userId);
       })
     ) {
       throw new Error('User is not into tour');
@@ -138,7 +138,7 @@ export class ToursService {
     if (
       !tour.participants.some((user, index) => {
         userIndex = index;
-        return user._id == joinTourDto.userId;
+        return user._id === joinTourDto.userId;
       })
     ) {
       throw new Error('User is not into tour');
