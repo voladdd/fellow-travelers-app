@@ -71,7 +71,7 @@ export class ToursController {
   }
 
   @Get(':id')
-  async findOneById(@Param('id', toMongoObjectIdPipe) id: any) {
+  async findOne(@Param('id', toMongoObjectIdPipe) id: any) {
     try {
       return await this.toursService.findOneById(id);
     } catch (error) {

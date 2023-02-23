@@ -1,3 +1,4 @@
+import { ToursService } from './../tours/services/tours.service';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { User, UserDocument } from './schemas/user.schema';
@@ -31,4 +32,10 @@ export class UsersService {
   async findAll(): Promise<User[]> {
     return await this.userModel.find().exec();
   }
+
+  async getProfile(id: Types.ObjectId) {
+    return await this.userModel.findOne({ _id: id });
+  }
+
+  async getProfileTours(id: Types.ObjectId) {}
 }

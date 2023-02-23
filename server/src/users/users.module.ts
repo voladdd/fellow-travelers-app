@@ -1,5 +1,8 @@
+import { ToursAbstractService } from './../tours/utils/other/tours.abstract.service';
+import { ToursModule } from './../tours/tours.module';
+import { ToursService } from './../tours/services/tours.service';
 import { UsersController } from './users.controller';
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { User, UserSchema } from './schemas/user.schema';
@@ -7,6 +10,7 @@ import { User, UserSchema } from './schemas/user.schema';
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
+    ToursModule,
   ],
   providers: [UsersService],
   exports: [UsersService],

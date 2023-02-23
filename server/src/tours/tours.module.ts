@@ -1,3 +1,4 @@
+import { UsersModule } from 'src/users/users.module';
 import { ToursAbstractService } from './utils/other/tours.abstract.service';
 import { StatusController } from './controllers/status.controller';
 import { PlacesController } from './controllers/places.contoller';
@@ -20,8 +21,6 @@ import { TransportsController } from './controllers/transports.controller';
 import { RoadsController } from './controllers/roads.controller';
 import { UsersService } from 'src/users/users.service';
 import { User, UserSchema } from 'src/users/schemas/user.schema';
-import { toMongoObjectIdPipe } from './utils/pipes/toMongoObjectId.pipe';
-import { APP_PIPE } from '@nestjs/core';
 
 @Module({
   imports: [
@@ -35,8 +34,8 @@ import { APP_PIPE } from '@nestjs/core';
     ]),
   ],
   providers: [
-    UsersService,
     ToursAbstractService,
+    UsersService,
     ToursService,
     DbCollectionsService,
     TransportsService,
@@ -44,6 +43,7 @@ import { APP_PIPE } from '@nestjs/core';
     PlacesService,
     RoadsService,
   ],
+  exports: [ToursService],
   //Need to specify controllers from longest paths to shortest
   controllers: [
     DbCollectionsController,

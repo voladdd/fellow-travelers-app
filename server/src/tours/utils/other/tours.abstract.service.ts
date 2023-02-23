@@ -46,13 +46,14 @@ export class ToursAbstractService {
     }
     return userIndex;
   }
+
   //check if user is author of tour
   async isAuthor(
     tour: HydratedDocument<Tour>,
     userId: Types.ObjectId,
   ): Promise<void | Error> {
     if (!tour.author._id.equals(userId)) {
-      throw new Error(`User have not this permisions`);
+      throw new Error(`Permission denied, able only for author`);
     }
   }
 }
