@@ -136,41 +136,36 @@ export class ToursService {
     reqUserId: Types.ObjectId,
     kickUserId: Types.ObjectId,
   ) {
-    const tour = await this.tourModel.findById(tourId);
-    if (!tour) {
-      throw new Error('Tour is not founded');
-    }
+    //find tour
+    const tour = await this.toursAbstractService.findObjectById(
+      this.tourModel,
+      tourId,
+      'tour',
+    );
 
-    //find reqUserId
-    const reqUser = await this.usersService.findById(reqUserId);
-    if (!reqUser) {
-      throw new Error('Author of request is not founded');
-    }
+    //check if reqUser and kickUser participating in Tour
+    const [reqUserIndex, kickUserIndex] = [
+      { id: reqUserId },
+      { id: kickUserId },
+    ].map(async (user) => {
+      const userIndex = await this.toursAbstractService.getUserIndex(
+        tour,
+        user.id,
+      );
+      if (!userIndex) {
+        throw new Error('User is not in tour');
+      }
+      return userIndex;
+    });
 
-    //find kickUser
-    const kickUser = await this.usersService.findById(kickUserId);
-    if (!kickUser) {
-      throw new Error('User to kick is not founded');
-    }
-
-    //check if reqUser already in tour
-    let kickUserIndex: number;
-    if (
-      !tour.participants.some((user, index) => {
-        kickUserIndex = index;
-        return user._id.equals(kickUserId);
-      })
-    ) {
-      throw new Error('Author of request is not into tour');
-    }
+    //check if reqUser is author of tour
+    await this.toursAbstractService.isAuthor(tour, reqUserId);
 
     //remove user from tour
-    // if (userIndex) {
-    //   tour.participants = [
-    //     ...tour.participants.slice(0, userIndex),
-    //     ...tour.participants.slice(userIndex + 1),
-    //   ];
-    // }
+    tour.participants = [
+      ...tour.participants.slice(0, await kickUserIndex),
+      ...tour.participants.slice((await kickUserIndex) + 1),
+    ];
 
     await tour.save();
 

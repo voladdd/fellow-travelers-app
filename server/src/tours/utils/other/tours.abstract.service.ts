@@ -5,6 +5,8 @@ import { UsersService } from 'src/users/users.service';
 import { RoadsService } from 'src/tours/services/roads.service';
 import { Road } from 'src/tours/schemas/road.schema';
 
+// check/is methods should initially throw exceptions, others optionally
+
 export class ToursAbstractService {
   async findObjectById<Type extends UsersService | RoadsService>(
     object: Type,
@@ -43,5 +45,14 @@ export class ToursAbstractService {
       return null;
     }
     return userIndex;
+  }
+  //check if user is author of tour
+  async isAuthor(
+    tour: HydratedDocument<Tour>,
+    userId: Types.ObjectId,
+  ): Promise<void | Error> {
+    if (!tour.author._id.equals(userId)) {
+      throw new Error(`User have not this permisions`);
+    }
   }
 }

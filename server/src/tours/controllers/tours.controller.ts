@@ -60,10 +60,10 @@ export class ToursController {
   async kick(
     @User('userId', toMongoObjectIdPipe) userId: any,
     @Param('id', toMongoObjectIdPipe) id: any,
-    @Query('kickId', toMongoObjectIdPipe) kickId: any,
+    @Query('value', toMongoObjectIdPipe) value: any,
   ) {
     try {
-      return await this.toursService.kickFromTour(id, userId, kickId);
+      return await this.toursService.kickFromTour(id, userId, value);
     } catch (error) {
       console.log(error);
       throw new HttpException('Error', HttpStatus.BAD_REQUEST);
