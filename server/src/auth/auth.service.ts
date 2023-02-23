@@ -15,7 +15,7 @@ export class AuthService {
    * @param telegramInitData
    * @returns Telegram user object
    */
-  async validateUserData(telegramInitData: string): Promise<any> {
+  async validateUserData(telegramInitData: string): Promise<User | null> {
     //get user object
     //check if valid telegram hash
     const res = await verifyTelegramWebAppData(telegramInitData);

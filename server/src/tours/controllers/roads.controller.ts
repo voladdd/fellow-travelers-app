@@ -6,9 +6,11 @@ import {
   HttpStatus,
   Post,
 } from '@nestjs/common';
-import { Body } from '@nestjs/common/decorators';
+import { Body, UseGuards } from '@nestjs/common/decorators';
 import { CreateRoadDto } from '../dto/create-road.dto';
+import { JwtAuthGuard } from '../../auth/jwt-auth.guard';
 
+@UseGuards(JwtAuthGuard)
 @Controller('tours')
 export class RoadsController {
   constructor(private roadsService: RoadsService) {}

@@ -30,4 +30,8 @@ export class RoadsService {
     const road = await this.roadModel.exists({ _id });
     return road ? true : false;
   }
+
+  async findById() {
+    return null;
+  }
 }

@@ -1,7 +1,9 @@
 import { Controller, HttpException, HttpStatus, Post } from '@nestjs/common';
-import { Delete } from '@nestjs/common/decorators';
+import { Delete, UseGuards } from '@nestjs/common/decorators';
 import { DbCollectionsService } from '../services/db-collections.service';
+import { JwtAuthGuard } from '../../auth/jwt-auth.guard';
 
+@UseGuards(JwtAuthGuard)
 @Controller('tours')
 export class DbCollectionsController {
   constructor(private dbCollectionsService: DbCollectionsService) {}

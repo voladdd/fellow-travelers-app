@@ -5,10 +5,12 @@ import {
   HttpStatus,
   Post,
 } from '@nestjs/common';
-import { Body } from '@nestjs/common/decorators';
+import { Body, UseGuards } from '@nestjs/common/decorators';
 import { PlacesService } from '../services/places.service';
 import { CreatePlaceDto } from '../dto/create-place.dto';
+import { JwtAuthGuard } from '../../auth/jwt-auth.guard';
 
+@UseGuards(JwtAuthGuard)
 @Controller('tours')
 export class PlacesController {
   constructor(private placesService: PlacesService) {}

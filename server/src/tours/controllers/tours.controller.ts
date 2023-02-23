@@ -1,4 +1,3 @@
-import { JoinTourDto } from './../dto/join-tour.dto';
 import { JwtAuthGuard } from './../../auth/jwt-auth.guard';
 import { CreateTourDto } from '../dto/create-tour.dto';
 import { ToursService } from '../services/tours.service';
@@ -8,15 +7,8 @@ import {
   HttpException,
   HttpStatus,
   Post,
-  ValidationPipe,
 } from '@nestjs/common';
-import {
-  Body,
-  Param,
-  UseGuards,
-  Request,
-  UsePipes,
-} from '@nestjs/common/decorators';
+import { Body, Param, Query, UseGuards } from '@nestjs/common/decorators';
 import { toMongoObjectIdPipe } from '../utils/pipes/toMongoObjectId.pipe';
 import { User } from '../../utils/user.decorator';
 
@@ -58,6 +50,20 @@ export class ToursController {
   ) {
     try {
       return await this.toursService.leaveTour(id, userId);
+    } catch (error) {
+      console.log(error);
+      throw new HttpException('Error', HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  @Post(':id/kick')
+  async kick(
+    @User('userId', toMongoObjectIdPipe) userId: any,
+    @Param('id', toMongoObjectIdPipe) id: any,
+    @Query('kickId', toMongoObjectIdPipe) kickId: any,
+  ) {
+    try {
+      return await this.toursService.kickFromTour(id, userId, kickId);
     } catch (error) {
       console.log(error);
       throw new HttpException('Error', HttpStatus.BAD_REQUEST);

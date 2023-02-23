@@ -1,3 +1,4 @@
+import { ToursAbstractService } from './../utils/other/tours.abstract.service';
 import { RoadsService } from './roads.service';
 import { UsersService } from './../../users/users.service';
 import { Injectable } from '@nestjs/common';
@@ -5,11 +6,11 @@ import { Tour, TourDocument } from '../schemas/tour.schema';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import { CreateTourDto } from '../dto/create-tour.dto';
-import { JoinTourDto } from '../dto/join-tour.dto';
 
 @Injectable()
 export class ToursService {
   constructor(
+    private toursAbstractService: ToursAbstractService,
     @InjectModel(Tour.name) private tourModel: Model<TourDocument>,
     private usersService: UsersService,
     private roadsService: RoadsService,
@@ -17,20 +18,18 @@ export class ToursService {
 
   async create(createTourDto: CreateTourDto) {
     //check if author exist
-    const isUserExist = await this.usersService.isUserExists(
+    await this.toursAbstractService.findObjectById(
+      this.usersService,
       createTourDto.author,
+      'user',
     );
-    if (!isUserExist) {
-      throw new Error('User is not founded');
-    }
 
     //check if road exist
-    const isRoadExist = await this.roadsService.isRoadExists(
+    await this.toursAbstractService.findObjectById(
+      this.roadsService,
       createTourDto.road,
+      'road',
     );
-    if (!isRoadExist) {
-      throw new Error('Road is not founded');
-    }
 
     //saving model
     const createdTour = new this.tourModel({
@@ -65,91 +64,114 @@ export class ToursService {
   }
 
   async findOneById(id: Types.ObjectId) {
-    return await this.tourModel.findById(id);
+    return await this.toursAbstractService.findObjectById(
+      this.tourModel,
+      id,
+      'Tour',
+    );
   }
 
   async joinTour(tourId: Types.ObjectId, userId: Types.ObjectId) {
     //find tour
-    const tour = await this.tourModel.findById(tourId);
-    if (!tour) {
-      throw new Error('Tour is not founded');
-    }
+    const tour = await this.toursAbstractService.findObjectById(
+      this.tourModel,
+      tourId,
+      'tour',
+    );
+
     //find user
-    const user = await this.usersService.findById(userId);
-    if (!user) {
-      throw new Error('User is not founded');
-    }
+    const user = await this.toursAbstractService.findObjectById(
+      this.usersService,
+      userId,
+      'user',
+    );
+
     //check if user already in tour
-    if (tour.participants.some((user) => user._id.equals(userId))) {
-      throw new Error('User is already joined');
+    if (await this.toursAbstractService.getUserIndex(tour, userId)) {
+      throw new Error('User already in tour');
     }
-    //add user to tour
+
+    //add user in tour
     tour.participants.push(user);
     await tour.save();
     return tour.toJSON();
   }
 
   async leaveTour(tourId: Types.ObjectId, userId: Types.ObjectId) {
+    //check if user exist
+    await this.toursAbstractService.findObjectById(
+      this.usersService,
+      userId,
+      'user',
+    );
+
     //find tour
-    const tour = await this.tourModel.findById(tourId);
-    if (!tour) {
-      throw new Error('Tour is not founded');
+    const tour = await this.toursAbstractService.findObjectById(
+      this.tourModel,
+      tourId,
+      'tour',
+    );
+
+    //get user index
+    const userIndex = await this.toursAbstractService.getUserIndex(
+      tour,
+      userId,
+    );
+    if (!userIndex) {
+      throw new Error('User is not in tour');
     }
-    //find user
-    const user = await this.usersService.findById(userId);
-    if (!user) {
-      throw new Error('User is not founded');
-    }
-    //check if user already in tour
-    let userIndex: number;
-    if (
-      !tour.participants.some((user, index) => {
-        userIndex = index;
-        return user._id.equals(userId);
-      })
-    ) {
-      throw new Error('User is not into tour');
-    }
+
     //remove user from tour
-    if (userIndex) {
-      tour.participants = [
-        ...tour.participants.slice(0, userIndex),
-        ...tour.participants.slice(userIndex + 1),
-      ];
-    }
+    tour.participants = [
+      ...tour.participants.slice(0, userIndex),
+      ...tour.participants.slice(userIndex + 1),
+    ];
     await tour.save();
 
     return tour.toJSON();
   }
 
-  async kickFromTour(tourId: Types.ObjectId, joinTourDto: JoinTourDto) {
-    //find tour
+  async kickFromTour(
+    tourId: Types.ObjectId,
+    reqUserId: Types.ObjectId,
+    kickUserId: Types.ObjectId,
+  ) {
     const tour = await this.tourModel.findById(tourId);
     if (!tour) {
       throw new Error('Tour is not founded');
     }
-    //find user
-    const user = await this.usersService.findById(joinTourDto.userId);
-    if (!user) {
-      throw new Error('User is not founded');
+
+    //find reqUserId
+    const reqUser = await this.usersService.findById(reqUserId);
+    if (!reqUser) {
+      throw new Error('Author of request is not founded');
     }
-    //check if user already in tour
-    let userIndex: number;
+
+    //find kickUser
+    const kickUser = await this.usersService.findById(kickUserId);
+    if (!kickUser) {
+      throw new Error('User to kick is not founded');
+    }
+
+    //check if reqUser already in tour
+    let kickUserIndex: number;
     if (
       !tour.participants.some((user, index) => {
-        userIndex = index;
-        return user._id === joinTourDto.userId;
+        kickUserIndex = index;
+        return user._id.equals(kickUserId);
       })
     ) {
-      throw new Error('User is not into tour');
+      throw new Error('Author of request is not into tour');
     }
+
     //remove user from tour
-    if (userIndex) {
-      tour.participants = [
-        ...tour.participants.slice(0, userIndex),
-        ...tour.participants.slice(userIndex + 1),
-      ];
-    }
+    // if (userIndex) {
+    //   tour.participants = [
+    //     ...tour.participants.slice(0, userIndex),
+    //     ...tour.participants.slice(userIndex + 1),
+    //   ];
+    // }
+
     await tour.save();
 
     return tour.toJSON();

@@ -1,4 +1,7 @@
-import { IsInt, IsString, Max, Min } from 'class-validator';
+import { Transform, Type } from 'class-transformer';
+import { IsInt, IsNotEmpty, IsString, Max, Min } from 'class-validator';
+import { toMongoObjectId } from '../utils/transformation/toMongoObjectId';
+import { Types } from 'mongoose';
 
 export class CreateTourDto {
   @IsInt()
@@ -9,9 +12,13 @@ export class CreateTourDto {
   @IsString()
   description: string;
 
-  @IsString()
-  author: string;
+  @IsNotEmpty()
+  @Type(() => Types.ObjectId)
+  @Transform(toMongoObjectId)
+  author: Types.ObjectId;
 
-  @IsString()
-  road: string;
+  @IsNotEmpty()
+  @Type(() => Types.ObjectId)
+  @Transform(toMongoObjectId)
+  road: Types.ObjectId;
 }

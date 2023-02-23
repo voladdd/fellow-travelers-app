@@ -1,3 +1,4 @@
+import { ToursAbstractService } from './utils/other/tours.abstract.service';
 import { StatusController } from './controllers/status.controller';
 import { PlacesController } from './controllers/places.contoller';
 import { Module } from '@nestjs/common';
@@ -35,6 +36,7 @@ import { APP_PIPE } from '@nestjs/core';
   ],
   providers: [
     UsersService,
+    ToursAbstractService,
     ToursService,
     DbCollectionsService,
     TransportsService,

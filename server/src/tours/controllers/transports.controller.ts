@@ -5,10 +5,13 @@ import {
   HttpException,
   HttpStatus,
   Post,
+  UseGuards,
 } from '@nestjs/common';
 import { TransportsService } from '../services/transports.service';
 import { CreateTransportDto } from '../dto/create-transport.dto';
+import { JwtAuthGuard } from '../../auth/jwt-auth.guard';
 
+@UseGuards(JwtAuthGuard)
 @Controller('tours')
 export class TransportsController {
   constructor(private transportsService: TransportsService) {}
