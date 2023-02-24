@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { Road, RoadDocument } from '../schemas/road.schema';
 import { CreateRoadDto } from '../dto/create-road.dto';
 
@@ -31,7 +31,7 @@ export class RoadsService {
     return road ? true : false;
   }
 
-  async findById() {
-    return null;
+  async findById(id: Types.ObjectId) {
+    return await this.roadModel.findById(id);
   }
 }

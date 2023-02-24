@@ -1,3 +1,4 @@
+import { Tour, TourDocument } from './../tours/schemas/tour.schema';
 import { ToursService } from './../tours/services/tours.service';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
@@ -9,7 +10,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 export class UsersService {
   constructor(
     @InjectModel(User.name) private userModel: Model<UserDocument>,
-    private toursService: ToursService,
+    @InjectModel(Tour.name) private tourModel: Model<TourDocument>,
   ) {}
 
   async create(createUserDto: CreateUserDto): Promise<User> {
@@ -40,5 +41,9 @@ export class UsersService {
     return await this.userModel.findOne({ _id: id });
   }
 
-  async getProfileTours(id: Types.ObjectId) {}
+  async getProfileTours(id: Types.ObjectId) {
+    return await this.tourModel.find({
+      participants: id,
+    });
+  }
 }

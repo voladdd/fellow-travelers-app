@@ -12,8 +12,10 @@ import { User, UserSchema } from './schemas/user.schema';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
-    ToursModule,
+    MongooseModule.forFeature([
+      { name: User.name, schema: UserSchema },
+      { name: Tour.name, schema: TourSchema },
+    ]),
   ],
   providers: [UsersService],
   exports: [UsersService],
