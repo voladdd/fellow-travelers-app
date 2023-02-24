@@ -1,3 +1,5 @@
+import { UsersModule } from 'src/users/users.module';
+import { ToursService } from './../tours/services/tours.service';
 import { CustomStrategy } from './custom.strategy';
 import { UsersService } from './../users/users.service';
 import { Module } from '@nestjs/common';
@@ -19,8 +21,9 @@ import { JwtStrategy } from './jwt.strategy';
       secret: process.env.JWT_SECRET,
       signOptions: { expiresIn: '7d' },
     }),
+    UsersModule,
   ],
-  providers: [AuthService, CustomStrategy, JwtStrategy, UsersService],
+  providers: [AuthService, CustomStrategy, JwtStrategy],
   controllers: [AuthController],
 })
 export class AuthModule {}

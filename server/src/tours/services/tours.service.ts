@@ -1,7 +1,7 @@
 import { ToursAbstractService } from './../utils/other/tours.abstract.service';
 import { RoadsService } from './roads.service';
 import { UsersService } from './../../users/users.service';
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable, forwardRef } from '@nestjs/common';
 import { Tour, TourDocument } from '../schemas/tour.schema';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
@@ -10,10 +10,11 @@ import { CreateTourDto } from '../dto/create-tour.dto';
 @Injectable()
 export class ToursService {
   constructor(
-    private toursAbstractService: ToursAbstractService,
     @InjectModel(Tour.name) private tourModel: Model<TourDocument>,
-    private usersService: UsersService,
+    private toursAbstractService: ToursAbstractService,
     private roadsService: RoadsService,
+    @Inject(forwardRef(() => UsersService))
+    private usersService: UsersService,
   ) {}
 
   async create(createTourDto: CreateTourDto) {

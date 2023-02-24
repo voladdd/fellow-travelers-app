@@ -1,3 +1,6 @@
+import { Road, RoadSchema } from './../tours/schemas/road.schema';
+import { RoadsService } from 'src/tours/services/roads.service';
+import { Tour, TourSchema } from './../tours/schemas/tour.schema';
 import { ToursAbstractService } from './../tours/utils/other/tours.abstract.service';
 import { ToursModule } from './../tours/tours.module';
 import { ToursService } from './../tours/services/tours.service';
