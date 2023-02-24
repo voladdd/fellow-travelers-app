@@ -29,7 +29,7 @@ export class UsersController {
     try {
       //need to get tours by specified query
       console.log(query);
-      return await this.usersService.getProfileTours(userId);
+      return await this.usersService.getProfileTours(userId, query);
     } catch (error) {
       console.log(error);
       throw new HttpException('Error', HttpStatus.BAD_REQUEST);

@@ -1,23 +1,27 @@
 import { Transform, Type } from 'class-transformer';
-import { IsOptional } from 'class-validator';
-import { Types, Date } from 'mongoose';
+import { IsNumber, IsOptional, Min } from 'class-validator';
+import { Types } from 'mongoose';
 import { toMongoObjectId } from '../../utils/transformation/toMongoObjectId';
-import { toDate } from '../../utils/transformation/toDate';
-import { Equals } from 'class-validator';
 import { IsEnum } from 'class-validator';
 
-enum sortDateBy {
-  asc = 'asc',
-  desc = 'desc',
+export enum sortDateBy {
+  asc = 1,
+  desc = -1,
 }
 
 export class QueryGetProfileToursDto {
   @IsOptional()
   @Type(() => Types.ObjectId)
   @Transform(toMongoObjectId)
-  status: Types.ObjectId;
+  status?: Types.ObjectId;
 
   @IsOptional()
   @IsEnum(sortDateBy)
-  sort: sortDateBy;
+  sort?: sortDateBy;
+
+  @IsOptional()
+  @Type(() => Number)
+  @IsNumber()
+  @Min(1)
+  page?: number;
 }
