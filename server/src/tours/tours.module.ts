@@ -31,7 +31,7 @@ import { User, UserSchema } from 'src/users/schemas/user.schema';
       { name: Status.name, schema: StatusSchema },
       { name: User.name, schema: UserSchema },
     ]),
-    forwardRef(() => UsersModule),
+    UsersModule,
   ],
   providers: [
     ToursService,

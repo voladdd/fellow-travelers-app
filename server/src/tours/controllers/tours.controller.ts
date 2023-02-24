@@ -8,9 +8,16 @@ import {
   HttpStatus,
   Post,
 } from '@nestjs/common';
-import { Body, Param, Query, UseGuards } from '@nestjs/common/decorators';
+import {
+  Body,
+  Param,
+  Query,
+  UseGuards,
+  Patch,
+} from '@nestjs/common/decorators';
 import { toMongoObjectIdPipe } from '../utils/pipes/toMongoObjectId.pipe';
 import { User } from '../../utils/user.decorator';
+import { UpdateStatusDto } from '../dto/update-status.dto';
 
 //using guard to provide valid auth data about user via bearer, who sended this request
 @UseGuards(JwtAuthGuard)
@@ -27,6 +34,23 @@ export class ToursController {
       throw new HttpException('Error', HttpStatus.BAD_REQUEST, {
         cause: new Error(error),
       });
+    }
+  }
+
+  @Patch(':id/status')
+  async updateStatus(
+    @User('userId', toMongoObjectIdPipe) userId: any,
+    @Body() updateStatusDto: UpdateStatusDto,
+  ) {
+    try {
+      return await this.toursService.updateStatus(
+        userId,
+        updateStatusDto.tourId,
+        updateStatusDto.status,
+      );
+    } catch (error) {
+      console.log(error);
+      throw new HttpException('Error', HttpStatus.BAD_REQUEST);
     }
   }
 

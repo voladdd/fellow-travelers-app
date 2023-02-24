@@ -1,36 +1,84 @@
+import { User, UserDocument } from '../../users/schemas/user.schema';
 import { ToursAbstractService } from './../utils/other/tours.abstract.service';
 import { RoadsService } from './roads.service';
 import { UsersService } from './../../users/users.service';
-import { Inject, Injectable, forwardRef } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { Tour, TourDocument } from '../schemas/tour.schema';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import { CreateTourDto } from '../dto/create-tour.dto';
+import { Status, StatusDocument } from '../schemas/status.schema';
+import { Road, RoadDocument } from '../schemas/road.schema';
 
 @Injectable()
 export class ToursService {
   constructor(
     @InjectModel(Tour.name) private tourModel: Model<TourDocument>,
+    @InjectModel(Status.name) private statusModel: Model<StatusDocument>,
+    @InjectModel(User.name) private userModel: Model<UserDocument>,
+    @InjectModel(Road.name) private roadModel: Model<RoadDocument>,
     private toursAbstractService: ToursAbstractService,
     private roadsService: RoadsService,
-    @Inject(forwardRef(() => UsersService))
     private usersService: UsersService,
   ) {}
 
+  async updateStatus(
+    reqUserId: Types.ObjectId,
+    tourId: Types.ObjectId,
+    statusId: Types.ObjectId,
+  ) {
+    //find tour
+    const tour = await this.tourModel.findById(tourId);
+    if (!tour) {
+      throw new Error('Tour is not found by id');
+    }
+
+    //check if reqUser is author of tour
+    await this.toursAbstractService.isAuthor(tour, reqUserId);
+
+    //find updated status
+    const updatedStatus = await this.statusModel.findById(statusId);
+    if (!updatedStatus) {
+      throw new Error('Status is not found by id');
+    }
+
+    //update status of tour
+    //tour status business process
+    // open <-> closed -> finished
+
+    //if tour status closed
+    //check if current status is open
+    switch (updatedStatus.name) {
+      case 'Закрыт':
+        console.log('Закрыт');
+        break;
+      case 'Открыт':
+        break;
+      case 'Завершен':
+        break;
+      default:
+        break;
+    }
+
+    //if tour status open
+    //check if current status is closed
+
+    //if tour status finished
+    //check if current status is closed
+  }
+
   async create(createTourDto: CreateTourDto) {
     //check if author exist
-    await this.toursAbstractService.findObjectById(
-      this.usersService,
-      createTourDto.author,
-      'user',
-    );
+    const user = await this.userModel.findById(createTourDto.author);
+    if (!user) {
+      throw new Error('User is not found by id');
+    }
 
     //check if road exist
-    await this.toursAbstractService.findObjectById(
-      this.roadsService,
-      createTourDto.road,
-      'road',
-    );
+    const road = await this.roadModel.findById(createTourDto.road);
+    if (!road) {
+      throw new Error('Road is not found by id');
+    }
 
     //saving model
     const createdTour = new this.tourModel({
@@ -69,18 +117,16 @@ export class ToursService {
 
   async joinTour(tourId: Types.ObjectId, userId: Types.ObjectId) {
     //find tour
-    const tour = await this.toursAbstractService.findObjectById(
-      this.tourModel,
-      tourId,
-      'tour',
-    );
+    const tour = await this.tourModel.findById(tourId);
+    if (!tour) {
+      throw new Error('Tour is not found by id');
+    }
 
     //find user
-    const user = await this.toursAbstractService.findObjectById(
-      this.usersService,
-      userId,
-      'user',
-    );
+    const user = await this.userModel.findById(userId);
+    if (!user) {
+      throw new Error('User is not found by id');
+    }
 
     //check if user already in tour
     if (await this.toursAbstractService.getUserIndex(tour, userId)) {
@@ -95,18 +141,16 @@ export class ToursService {
 
   async leaveTour(tourId: Types.ObjectId, userId: Types.ObjectId) {
     //check if user exist
-    await this.toursAbstractService.findObjectById(
-      this.usersService,
-      userId,
-      'user',
-    );
+    const user = await this.userModel.findById(userId);
+    if (!user) {
+      throw new Error('User is not found by id');
+    }
 
     //find tour
-    const tour = await this.toursAbstractService.findObjectById(
-      this.tourModel,
-      tourId,
-      'tour',
-    );
+    const tour = await this.tourModel.findById(tourId);
+    if (!tour) {
+      throw new Error('Tour is not found by id');
+    }
 
     //get user index
     const userIndex = await this.toursAbstractService.getUserIndex(
@@ -133,11 +177,10 @@ export class ToursService {
     kickUserId: Types.ObjectId,
   ) {
     //find tour
-    const tour = await this.toursAbstractService.findObjectById(
-      this.tourModel,
-      tourId,
-      'tour',
-    );
+    const tour = await this.tourModel.findById(tourId);
+    if (!tour) {
+      throw new Error('Tour is not found by id');
+    }
 
     //check if reqUser and kickUser participating in Tour
     const [reqUserIndex, kickUserIndex] = [
