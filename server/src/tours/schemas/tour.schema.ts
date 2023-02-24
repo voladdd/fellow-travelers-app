@@ -6,7 +6,7 @@ import { Status } from './status.schema';
 
 export type TourDocument = HydratedDocument<Tour>;
 
-@Schema()
+@Schema({ timestamps: true })
 export class Tour {
   @Prop({ required: true, max: 5 })
   maxPeopleCount: number;
@@ -37,6 +37,12 @@ export class Tour {
     ref: 'Status',
   })
   status: Status;
+
+  @Prop({ type: mongoose.Schema.Types.Date })
+  createdAt: Date;
+
+  @Prop({ type: mongoose.Schema.Types.Date })
+  updatedAt: Date;
 }
 
 export const TourSchema = SchemaFactory.createForClass(Tour);

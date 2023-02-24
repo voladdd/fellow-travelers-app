@@ -1,7 +1,5 @@
 import { UsersModule } from 'src/users/users.module';
-import { ToursService } from './../tours/services/tours.service';
 import { CustomStrategy } from './custom.strategy';
-import { UsersService } from './../users/users.service';
 import { Module } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';

@@ -15,9 +15,6 @@ export class User {
 
   @Prop({ required: true })
   firstName: string;
-
-  // @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Tour' }] })
-  // tours: Tour[];
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

@@ -1,6 +1,6 @@
 import { Transform, Type } from 'class-transformer';
 import { IsInt, IsNotEmpty, IsString, Max, Min } from 'class-validator';
-import { toMongoObjectId } from '../utils/transformation/toMongoObjectId';
+import { toMongoObjectId } from '../../utils/transformation/toMongoObjectId';
 import { Types } from 'mongoose';
 
 export class CreateTourDto {

@@ -19,7 +19,6 @@ import { RoadsService } from './services/roads.service';
 import { DbCollectionsController } from './controllers/db-collections.controller';
 import { TransportsController } from './controllers/transports.controller';
 import { RoadsController } from './controllers/roads.controller';
-import { UsersService } from 'src/users/users.service';
 import { User, UserSchema } from 'src/users/schemas/user.schema';
 
 @Module({

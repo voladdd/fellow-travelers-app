@@ -1,5 +1,4 @@
 import { Tour, TourDocument } from './../tours/schemas/tour.schema';
-import { ToursService } from './../tours/services/tours.service';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { User, UserDocument } from './schemas/user.schema';

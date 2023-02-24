@@ -1,4 +1,4 @@
-import { ToursService } from './../tours/services/tours.service';
+import { QueryGetProfileToursDto } from './dto/query-get-profile-tours.dto';
 import { toMongoObjectIdPipe } from './../tours/utils/pipes/toMongoObjectId.pipe';
 import { JwtAuthGuard } from './../auth/jwt-auth.guard';
 import {
@@ -7,6 +7,7 @@ import {
   HttpException,
   HttpStatus,
   Param,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
@@ -16,13 +17,18 @@ import { User } from '../utils/user.decorator';
 @Controller('users')
 export class UsersController {
   constructor(private usersService: UsersService) {}
+
   //users/profile/tours&status=...&sort_by=
   //users/profile/tours&status=
-
   //users/profile/tours
   @Get('profile/tours')
-  async getProfileTours(@User('userId', toMongoObjectIdPipe) userId: any) {
+  async getProfileTours(
+    @User('userId', toMongoObjectIdPipe) userId: any,
+    @Query() query?: QueryGetProfileToursDto,
+  ) {
     try {
+      //need to get tours by specified query
+      console.log(query);
       return await this.usersService.getProfileTours(userId);
     } catch (error) {
       console.log(error);
