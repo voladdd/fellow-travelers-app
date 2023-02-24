@@ -44,9 +44,12 @@ export class ToursService {
   }
 
   async findAll(): Promise<Tour[]> {
-    //move population to findOneById
+    return await this.tourModel.find();
+  }
+
+  async findOneById(id: Types.ObjectId) {
     return await this.tourModel
-      .find()
+      .findById(id)
       .populate([
         { path: 'author', model: 'User' },
         { path: 'participants', model: 'User' },
@@ -62,14 +65,6 @@ export class ToursService {
         },
       ])
       .exec();
-  }
-
-  async findOneById(id: Types.ObjectId) {
-    return await this.toursAbstractService.findObjectById(
-      this.tourModel,
-      id,
-      'Tour',
-    );
   }
 
   async joinTour(tourId: Types.ObjectId, userId: Types.ObjectId) {
