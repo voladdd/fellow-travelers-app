@@ -1,8 +1,10 @@
 import { User, UserDocument } from '../../users/schemas/user.schema';
 import { ToursAbstractService } from './../utils/other/tours.abstract.service';
-import { RoadsService } from './roads.service';
-import { UsersService } from './../../users/users.service';
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { Tour, TourDocument } from '../schemas/tour.schema';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
@@ -19,8 +21,6 @@ export class ToursService {
     @InjectModel(User.name) private userModel: Model<UserDocument>,
     @InjectModel(Road.name) private roadModel: Model<RoadDocument>,
     private toursAbstractService: ToursAbstractService,
-    private roadsService: RoadsService,
-    private usersService: UsersService,
   ) {}
 
   async updateStatus(
@@ -39,7 +39,7 @@ export class ToursService {
       ])
       .exec();
     if (!tour) {
-      throw new Error('Tour is not found by id');
+      throw new NotFoundException(`Tour #${tourId} not found`);
     }
     const currentStatus = tour.status.name;
 
@@ -49,7 +49,7 @@ export class ToursService {
     //find updated status
     const toStatus = await this.statusModel.findById(statusId);
     if (!toStatus) {
-      throw new Error('Status is not found by id');
+      throw new NotFoundException(`Status #${statusId} not found`);
     }
 
     //update status of tour
@@ -81,7 +81,7 @@ export class ToursService {
     }
     //if not allowed update throw error
     if (!isUpdated) {
-      throw new Error('Status cannot be updated');
+      throw new BadRequestException('Can`t update status');
     }
     //else update & return tour
     tour.depopulate('status');
@@ -93,13 +93,13 @@ export class ToursService {
     //check if author exist
     const user = await this.userModel.findById(createTourDto.author);
     if (!user) {
-      throw new Error('User is not found by id');
+      throw new NotFoundException(`User #${createTourDto.author} not found`);
     }
 
     //check if road exist
     const road = await this.roadModel.findById(createTourDto.road);
     if (!road) {
-      throw new Error('Road is not found by id');
+      throw new NotFoundException(`Road #${createTourDto.road} not found`);
     }
 
     //saving model
@@ -141,18 +141,18 @@ export class ToursService {
     //find tour
     const tour = await this.tourModel.findById(tourId);
     if (!tour) {
-      throw new Error('Tour is not found by id');
+      throw new NotFoundException(`Tour #${tourId} not found`);
     }
 
     //find user
     const user = await this.userModel.findById(userId);
     if (!user) {
-      throw new Error('User is not found by id');
+      throw new NotFoundException(`User #${userId} not found`);
     }
 
     //check if user already in tour
     if (await this.toursAbstractService.getUserIndex(tour, userId)) {
-      throw new Error('User already in tour');
+      throw new BadRequestException(`User #${userId} already in tour`);
     }
 
     //add user in tour
@@ -165,13 +165,13 @@ export class ToursService {
     //check if user exist
     const user = await this.userModel.findById(userId);
     if (!user) {
-      throw new Error('User is not found by id');
+      throw new NotFoundException(`User #${userId} not found`);
     }
 
     //find tour
     const tour = await this.tourModel.findById(tourId);
     if (!tour) {
-      throw new Error('Tour is not found by id');
+      throw new NotFoundException(`Tour #${tourId} not found`);
     }
 
     //get user index
@@ -180,7 +180,7 @@ export class ToursService {
       userId,
     );
     if (!userIndex) {
-      throw new Error('User is not in tour');
+      throw new NotFoundException(`User #${userId} not found`);
     }
 
     //remove user from tour
@@ -201,7 +201,7 @@ export class ToursService {
     //find tour
     const tour = await this.tourModel.findById(tourId);
     if (!tour) {
-      throw new Error('Tour is not found by id');
+      throw new NotFoundException(`Tour #${tourId} not found`);
     }
 
     //check if reqUser and kickUser participating in Tour
@@ -214,7 +214,7 @@ export class ToursService {
         user.id,
       );
       if (!userIndex) {
-        throw new Error('User is not in tour');
+        throw new NotFoundException(`User #${user.id} not found`);
       }
       return userIndex;
     });
@@ -232,16 +232,4 @@ export class ToursService {
 
     return tour.toJSON();
   }
-
-  //get tour by userId
-
-  //update tour
-
-  //delete tour
-
-  //add participant to tour
-
-  //remove participant from tour
-
-  //get tour participants
 }

@@ -1,5 +1,6 @@
 import { HydratedDocument, Types } from 'mongoose';
 import { Tour } from '../../schemas/tour.schema';
+import { ForbiddenException } from '@nestjs/common';
 
 // check/is methods should initially throw exceptions, others optionally
 
@@ -27,7 +28,7 @@ export class ToursAbstractService {
     userId: Types.ObjectId,
   ): Promise<void | Error> {
     if (!tour.author._id.equals(userId)) {
-      throw new Error(`Permission denied, able only for author`);
+      throw new ForbiddenException('Author only');
     }
   }
 }
