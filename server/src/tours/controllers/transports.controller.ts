@@ -3,7 +3,6 @@ import {
   Controller,
   Get,
   HttpException,
-  HttpStatus,
   Post,
   UseGuards,
 } from '@nestjs/common';
@@ -21,8 +20,7 @@ export class TransportsController {
     try {
       return await this.transportsService.findAll();
     } catch (error) {
-      console.log(error);
-      throw new HttpException('Error', HttpStatus.BAD_REQUEST);
+      throw new HttpException(error.message, error.status);
     }
   }
 
@@ -31,8 +29,7 @@ export class TransportsController {
     try {
       return await this.transportsService.create(createTransportDto);
     } catch (error) {
-      console.log(error);
-      throw new HttpException('Error', HttpStatus.BAD_REQUEST);
+      throw new HttpException(error.message, error.status);
     }
   }
 }

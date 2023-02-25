@@ -1,4 +1,4 @@
-import { Controller, HttpException, HttpStatus, Post } from '@nestjs/common';
+import { Controller, HttpException, Post } from '@nestjs/common';
 import { Delete, UseGuards } from '@nestjs/common/decorators';
 import { DbCollectionsService } from '../services/db-collections.service';
 import { JwtAuthGuard } from '../../auth/jwt-auth.guard';
@@ -13,8 +13,7 @@ export class DbCollectionsController {
     try {
       await this.dbCollectionsService.fillSampleData();
     } catch (error) {
-      console.log(error);
-      throw new HttpException('Error', HttpStatus.BAD_REQUEST);
+      throw new HttpException(error.message, error.status);
     }
   }
 
@@ -23,8 +22,7 @@ export class DbCollectionsController {
     try {
       await this.dbCollectionsService.dropAllData();
     } catch (error) {
-      console.log(error);
-      throw new HttpException('Error', HttpStatus.BAD_REQUEST);
+      throw new HttpException(error.message, error.status);
     }
   }
 }

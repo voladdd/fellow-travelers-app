@@ -1,10 +1,4 @@
-import {
-  Controller,
-  Get,
-  HttpException,
-  HttpStatus,
-  Post,
-} from '@nestjs/common';
+import { Controller, Get, HttpException, Post } from '@nestjs/common';
 import { Body, UseGuards } from '@nestjs/common/decorators';
 import { PlacesService } from '../services/places.service';
 import { CreatePlaceDto } from '../dto/create-place.dto';
@@ -20,8 +14,7 @@ export class PlacesController {
     try {
       return await this.placesService.findAll();
     } catch (error) {
-      console.log(error);
-      throw new HttpException('Error', HttpStatus.BAD_REQUEST);
+      throw new HttpException(error.message, error.status);
     }
   }
 
@@ -30,8 +23,7 @@ export class PlacesController {
     try {
       return await this.placesService.create(createPlaceDto);
     } catch (error) {
-      console.log(error);
-      throw new HttpException('Error', HttpStatus.BAD_REQUEST);
+      throw new HttpException(error.message, error.status);
     }
   }
 }

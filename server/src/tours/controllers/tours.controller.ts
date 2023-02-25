@@ -1,13 +1,7 @@
 import { JwtAuthGuard } from './../../auth/jwt-auth.guard';
 import { CreateTourDto } from '../dto/create-tour.dto';
 import { ToursService } from '../services/tours.service';
-import {
-  Controller,
-  Get,
-  HttpException,
-  HttpStatus,
-  Post,
-} from '@nestjs/common';
+import { Controller, Get, HttpException, Post } from '@nestjs/common';
 import {
   Body,
   Param,
@@ -30,10 +24,7 @@ export class ToursController {
     try {
       return await this.toursService.create(createTourDto);
     } catch (error) {
-      console.log(error);
-      throw new HttpException('Error', HttpStatus.BAD_REQUEST, {
-        cause: new Error(error),
-      });
+      throw new HttpException(error.message, error.status);
     }
   }
 
@@ -50,8 +41,7 @@ export class ToursController {
         updateStatusDto.status,
       );
     } catch (error) {
-      console.log(error);
-      throw new HttpException('Error', HttpStatus.BAD_REQUEST);
+      throw new HttpException(error.message, error.status);
     }
   }
 
@@ -63,8 +53,7 @@ export class ToursController {
     try {
       return await this.toursService.joinTour(id, userId);
     } catch (error) {
-      console.log(error);
-      throw new HttpException('Error', HttpStatus.BAD_REQUEST);
+      throw new HttpException(error.message, error.status);
     }
   }
 
@@ -76,8 +65,7 @@ export class ToursController {
     try {
       return await this.toursService.leaveTour(id, userId);
     } catch (error) {
-      console.log(error);
-      throw new HttpException('Error', HttpStatus.BAD_REQUEST);
+      throw new HttpException(error.message, error.status);
     }
   }
 
@@ -90,8 +78,7 @@ export class ToursController {
     try {
       return await this.toursService.kickFromTour(id, userId, value);
     } catch (error) {
-      console.log(error);
-      throw new HttpException('Error', HttpStatus.BAD_REQUEST);
+      throw new HttpException(error.message, error.status);
     }
   }
 
@@ -100,8 +87,7 @@ export class ToursController {
     try {
       return await this.toursService.findOneById(id);
     } catch (error) {
-      console.log(error);
-      throw new HttpException('Error', HttpStatus.BAD_REQUEST);
+      throw new HttpException(error.message, error.status);
     }
   }
 
@@ -110,8 +96,7 @@ export class ToursController {
     try {
       return await this.toursService.findAll();
     } catch (error) {
-      console.log(error);
-      throw new HttpException('Error', HttpStatus.BAD_REQUEST);
+      throw new HttpException(error.message, error.status);
     }
   }
 }

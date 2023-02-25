@@ -2,7 +2,7 @@ import { UsersModule } from 'src/users/users.module';
 import { ToursAbstractService } from './utils/other/tours.abstract.service';
 import { StatusController } from './controllers/status.controller';
 import { PlacesController } from './controllers/places.contoller';
-import { Module, forwardRef } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { ToursService } from './services/tours.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Tour, TourSchema } from './schemas/tour.schema';

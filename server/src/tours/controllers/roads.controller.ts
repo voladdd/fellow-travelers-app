@@ -1,11 +1,5 @@
 import { RoadsService } from '../services/roads.service';
-import {
-  Controller,
-  Get,
-  HttpException,
-  HttpStatus,
-  Post,
-} from '@nestjs/common';
+import { Controller, Get, HttpException, Post } from '@nestjs/common';
 import { Body, UseGuards } from '@nestjs/common/decorators';
 import { CreateRoadDto } from '../dto/create-road.dto';
 import { JwtAuthGuard } from '../../auth/jwt-auth.guard';
@@ -20,8 +14,7 @@ export class RoadsController {
     try {
       return await this.roadsService.findAll();
     } catch (error) {
-      console.log(error);
-      throw new HttpException('Error', HttpStatus.BAD_REQUEST);
+      throw new HttpException(error.message, error.status);
     }
   }
 
@@ -30,8 +23,7 @@ export class RoadsController {
     try {
       return await this.roadsService.create(createRoadDto);
     } catch (error) {
-      console.log(error);
-      throw new HttpException('Error', HttpStatus.BAD_REQUEST);
+      throw new HttpException(error.message, error.status);
     }
   }
 }

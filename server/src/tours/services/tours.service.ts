@@ -118,7 +118,7 @@ export class ToursService {
   }
 
   async findOneById(id: Types.ObjectId) {
-    return await this.tourModel
+    const tour = await this.tourModel
       .findById(id)
       .populate([
         { path: 'author', model: 'User' },
@@ -135,6 +135,10 @@ export class ToursService {
         },
       ])
       .exec();
+    if (!tour) {
+      throw new NotFoundException(`Tour #${id} not found`);
+    }
+    return tour;
   }
 
   async joinTour(tourId: Types.ObjectId, userId: Types.ObjectId) {

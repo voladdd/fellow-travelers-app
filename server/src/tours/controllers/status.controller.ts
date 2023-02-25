@@ -1,10 +1,4 @@
-import {
-  Controller,
-  Get,
-  HttpException,
-  HttpStatus,
-  UseGuards,
-} from '@nestjs/common';
+import { Controller, Get, HttpException, UseGuards } from '@nestjs/common';
 import { StatusService } from '../services/status.service';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
@@ -18,8 +12,7 @@ export class StatusController {
     try {
       return await this.statusService.findAll();
     } catch (error) {
-      console.log(error);
-      throw new HttpException('Error', HttpStatus.BAD_REQUEST);
+      throw new HttpException(error.message, error.status);
     }
   }
 }
