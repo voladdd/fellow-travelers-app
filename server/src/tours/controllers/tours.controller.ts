@@ -40,12 +40,13 @@ export class ToursController {
   @Patch(':id/status')
   async updateStatus(
     @User('userId', toMongoObjectIdPipe) userId: any,
+    @Param('id', toMongoObjectIdPipe) tourId: any,
     @Body() updateStatusDto: UpdateStatusDto,
   ) {
     try {
       return await this.toursService.updateStatus(
         userId,
-        updateStatusDto.tourId,
+        tourId,
         updateStatusDto.status,
       );
     } catch (error) {

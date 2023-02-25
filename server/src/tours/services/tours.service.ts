@@ -9,6 +9,7 @@ import { Model, Types } from 'mongoose';
 import { CreateTourDto } from '../dto/create-tour.dto';
 import { Status, StatusDocument } from '../schemas/status.schema';
 import { Road, RoadDocument } from '../schemas/road.schema';
+import { TourStatusNames } from '../utils/other/tours.enums';
 
 @Injectable()
 export class ToursService {
@@ -28,43 +29,64 @@ export class ToursService {
     statusId: Types.ObjectId,
   ) {
     //find tour
-    const tour = await this.tourModel.findById(tourId);
+    const tour = await this.tourModel
+      .findById(tourId)
+      .populate([
+        {
+          path: 'status',
+          model: 'Status',
+        },
+      ])
+      .exec();
     if (!tour) {
       throw new Error('Tour is not found by id');
     }
+    const currentStatus = tour.status.name;
 
     //check if reqUser is author of tour
     await this.toursAbstractService.isAuthor(tour, reqUserId);
 
     //find updated status
-    const updatedStatus = await this.statusModel.findById(statusId);
-    if (!updatedStatus) {
+    const toStatus = await this.statusModel.findById(statusId);
+    if (!toStatus) {
       throw new Error('Status is not found by id');
     }
 
     //update status of tour
     //tour status business process
-    // open <-> closed -> finished
-
-    //if tour status closed
-    //check if current status is open
-    switch (updatedStatus.name) {
-      case 'Закрыт':
-        console.log('Закрыт');
+    //open <-> closed -> finished
+    let isUpdated = false;
+    switch (toStatus.name) {
+      //if toStatus closed
+      case TourStatusNames.Closed:
+        //check if current status is open
+        if (currentStatus === TourStatusNames.Opened) {
+          isUpdated = true;
+        }
         break;
-      case 'Открыт':
+      //if toStatus open
+      case TourStatusNames.Opened:
+        //check if current status is closed
+        if (currentStatus === TourStatusNames.Closed) {
+          isUpdated = true;
+        }
         break;
-      case 'Завершен':
-        break;
-      default:
+      //if toStatus finished
+      case TourStatusNames.Finished:
+        //check if current status is closed
+        if (currentStatus === TourStatusNames.Closed) {
+          isUpdated = true;
+        }
         break;
     }
-
-    //if tour status open
-    //check if current status is closed
-
-    //if tour status finished
-    //check if current status is closed
+    //if not allowed update throw error
+    if (!isUpdated) {
+      throw new Error('Status cannot be updated');
+    }
+    //else update & return tour
+    tour.depopulate('status');
+    await tour.updateOne({ status: toStatus.id });
+    return tour;
   }
 
   async create(createTourDto: CreateTourDto) {

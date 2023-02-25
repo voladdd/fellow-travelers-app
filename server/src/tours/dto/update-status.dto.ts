@@ -8,9 +8,4 @@ export class UpdateStatusDto {
   @Type(() => Types.ObjectId)
   @Transform(toMongoObjectId)
   status: Types.ObjectId;
-
-  @IsNotEmpty()
-  @Type(() => Types.ObjectId)
-  @Transform(toMongoObjectId)
-  tourId: Types.ObjectId;
 }
