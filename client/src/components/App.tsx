@@ -1,9 +1,11 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
 import { useTelegram } from "../hooks/useTelegram";
+import { authHost } from "../http";
 
 function App() {
-  const { tg, onClose } = useTelegram();
+  const { tg } = useTelegram();
+  const [data, setData] = useState<any>("sample data");
 
   useEffect(() => {
     tg.ready();
@@ -11,7 +13,15 @@ function App() {
 
   return (
     <div className="App">
-      <button onClick={onClose}>Close</button>
+      <p>{data}</p>
+      <button
+        onClick={async () => {
+          const response = await authHost.get("/tours");
+          console.log(response.data);
+        }}
+      >
+        fetch data
+      </button>
     </div>
   );
 }

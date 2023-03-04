@@ -1,3 +1,5 @@
+//Interface for window.Telegram.WebApp
+
 export interface IWebApp {
   /**
    * A string with raw data transferred to the Web App, convenient for validating data.
@@ -14,11 +16,11 @@ export interface IWebApp {
   It is recommended to call this method as early as possible, as soon as all essential interface elements are loaded. Once this method is called, the loading placeholder is hidden and the Web App is shown.
   If the method is not called, the placeholder will be hidden only when the page is fully loaded. 
   */
-  ready(): () => {};
+  ready(): void;
   /**
    * A method that closes the Web App.
    * */
-  close(): () => {};
+  close(): void;
   showPopup(params: IPopupParams, callback?: () => {}): () => {};
   MainButton: IMainButton;
   PopupParams: IPopupParams;
@@ -31,12 +33,12 @@ export interface IMainButton {
   /**
    * A method that sets the button press event handler. An alias for Telegram.WebApp.onEvent('mainButtonClicked', callback)
    * */
-  onClick: (callback: any) => {};
+  onClick(event: string, callback?: () => {}): void;
   /**
    * A method to make the button visible.
   Note that opening the Web App from the attachment menu hides the main button until the user interacts with the Web App interface. 
   */
-  show: () => {};
+  show(): void;
 }
 
 export interface IWebAppInitData {}
