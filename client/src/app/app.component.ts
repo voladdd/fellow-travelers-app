@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { TelegramWebAppService } from './telegram/services/telegram-webapp.service';
 
 @Component({
@@ -7,11 +8,15 @@ import { TelegramWebAppService } from './telegram/services/telegram-webapp.servi
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
-  constructor(private telegramWebAppService: TelegramWebAppService) {}
+  constructor(private telegramWebAppService: TelegramWebAppService, private router: Router) { }
 
   title = 'client';
 
   ngOnInit() {
     console.log(this.telegramWebAppService.getInitData());
+  }
+
+  onRouteButtonClick(route: string) {
+    this.router.navigate([`/${route}`]);
   }
 }

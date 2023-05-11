@@ -1,0 +1,21 @@
+<h2>Создание тура</h2>
+<form (ngSubmit)="onSubmit()">
+  <label>* Отправление *</label>
+  <input type="text" name="departureFrom" (ngModel)="departureFrom" placeholder="Откуда?">
+  <input type="text" name="departureTo" (ngModel)="departureTo" placeholder="Куда?">
+  <input type="number" name="numberOfPeople" (ngModel)="numberOfPeople" placeholder="Кол-во людей">
+  <label>Когда?</label>
+  <input type="datetime-local" name="departureTime" (ngModel)="departureTime">
+  <label>Во сколько?</label>
+  <input type="date" name="departureDate" (ngModel)="departureDate">
+
+  <label>* Сбор *</label>
+  <input type="text" name="meetingPointLocation" (ngModel)="meetingPointLocation" placeholder="Где?">
+  <label>Во сколько?</label>
+  <input type="time" name="meetingPointTime" (ngModel)="meetingPointTime">
+
+  <label>* Доп. информация *</label>
+  <textarea name="additionalInfo" (ngModel)="additionalInfo"></textarea>
+
+  <button type="submit">Создать тур</button>
+</form>
