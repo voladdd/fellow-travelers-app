@@ -1,3 +1,4 @@
+import { FormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
@@ -13,7 +14,7 @@ import { HomePageComponent } from './components/home-page/home-page.component';
 
 @NgModule({
   declarations: [AppComponent, ToursPageComponent, ToursListComponent, TourPageComponent, TourCreationPageComponent, TourListItemComponent, HomePageComponent],
-  imports: [BrowserModule, HttpClientModule, AppRoutingModule],
+  imports: [BrowserModule, HttpClientModule, AppRoutingModule, FormsModule],
   bootstrap: [AppComponent],
 })
 export class AppModule { }

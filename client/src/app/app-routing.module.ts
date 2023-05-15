@@ -4,6 +4,7 @@ import { HomePageComponent } from './components/home-page/home-page.component';
 import { ToursPageComponent } from './components/tours-page/tours-page.component';
 import { TourPageComponent } from './components/tour-page/tour-page.component';
 import { TourCreationPageComponent } from './components/tour-creation-page/tour-creation-page.component';
+import { FormsModule } from '@angular/forms';
 
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -14,7 +15,11 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [
+    RouterModule.forRoot(routes),
+    FormsModule
+  ],
+
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

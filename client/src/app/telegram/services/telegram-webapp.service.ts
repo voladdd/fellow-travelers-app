@@ -12,4 +12,8 @@ export class TelegramWebAppService {
   getInitData() {
     return this.tg.initData;
   }
+
+  alert(title: string, message: string) {
+    this.tg.showPopup({ title, message, buttons: [{ text: 'ок' }] })
+  }
 }
