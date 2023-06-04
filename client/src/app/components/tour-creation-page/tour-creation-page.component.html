@@ -1,21 +1,30 @@
 <h2>Создание тура</h2>
 <form (ngSubmit)="onSubmit()">
   <label>* Отправление *</label>
-  <input type="text" name="departureFrom" [(ngModel)]="departureFrom" placeholder="Откуда?">
-  <input type="text" name="departureTo" [(ngModel)]="departureTo" placeholder="Куда?">
+  <select [(ngModel)]="selectedOptionDepartureFrom" name="selectDepartureFrom" (change)="onSelectionChangeDepartureFrom($event.target)">
+    <option *ngFor="let option of optionsPlaces" [value]="option.value">{{option.label}}</option>
+  </select>  
+  <select [(ngModel)]="selectedOptionDepartureTo" name="selectDepartureTo" (change)="onSelectionChangeDepartureTo($event.target)">
+    <option *ngFor="let option of optionsPlaces" [value]="option.value">{{option.label}}</option>
+  </select>  
   <input type="number" name="numberOfPeople" [(ngModel)]="numberOfPeople" placeholder="Кол-во людей">
   <label>Когда?</label>
   <input type="date" name="departureDate" [(ngModel)]="departureDate">
   <label>Во сколько?</label>
   <input type="time" name="departureTime" [(ngModel)]="departureTime">
+  <label>На каком транспорте?</label>
+  <select [(ngModel)]="selectedOptionTransport" name="selectTransport" (change)="onSelectionChangeTransport($event.target)">
+    <option *ngFor="let option of optionsTransports" [value]="option.value">{{option.label}}</option>
+  </select>  
 
   <label>* Сбор *</label>
-  <input type="text" name="meetingPointLocation" [(ngModel)]="meetingPointLocation" placeholder="Где?">
+  <select [(ngModel)]="selectedOptionMeetingPointLocation" name="selectMeetingPointLocation" (change)="onSelectionChangeMeetingPointLocation($event.target)">
+    <option *ngFor="let option of optionsPlaces" [value]="option.value">{{option.label}}</option>
+  </select>  
   <label>Во сколько?</label>
   <input type="time" name="meetingPointTime" [(ngModel)]="meetingPointTime">
 
   <label>* Доп. информация *</label>
   <textarea name="additionalInfo" [(ngModel)]="additionalInfo"></textarea>
-
   <button type="submit">Создать тур</button>
 </form>

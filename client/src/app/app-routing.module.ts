@@ -7,7 +7,7 @@ import { TourCreationPageComponent } from './components/tour-creation-page/tour-
 import { FormsModule } from '@angular/forms';
 
 const routes: Routes = [
-  { path: '', redirectTo: '/home', pathMatch: 'full' },
+  { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: 'home', component: HomePageComponent },
   { path: 'tours/create', component: TourCreationPageComponent },
   { path: 'tours/:id', component: TourPageComponent },
