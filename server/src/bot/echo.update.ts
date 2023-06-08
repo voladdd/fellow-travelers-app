@@ -4,7 +4,7 @@ import { Context as TelegrafContext } from 'telegraf';
 
 @Update()
 export class EchoUpdate {
-  constructor(private usersService: UsersService) {}
+  constructor(private usersService: UsersService) { }
 
   @Start()
   async start(@Ctx() ctx: TelegrafContext) {

@@ -1,4 +1,4 @@
-import { UsersModule } from 'src/users/users.module';
+import { UsersModule } from './../users/users.module';
 import { CustomStrategy } from './custom.strategy';
 import { Module } from '@nestjs/common';
 import { AuthService } from './auth.service';
@@ -24,4 +24,4 @@ import { JwtStrategy } from './jwt.strategy';
   providers: [AuthService, CustomStrategy, JwtStrategy],
   controllers: [AuthController],
 })
-export class AuthModule {}
+export class AuthModule { }

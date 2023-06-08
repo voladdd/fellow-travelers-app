@@ -1,11 +1,11 @@
+import { JwtAuthGuard } from './../../auth/jwt-auth.guard';
 import { Controller, Get, HttpException, UseGuards } from '@nestjs/common';
 import { StatusService } from '../services/status.service';
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 @UseGuards(JwtAuthGuard)
 @Controller('tours')
 export class StatusController {
-  constructor(private statusService: StatusService) {}
+  constructor(private statusService: StatusService) { }
 
   @Get('/status')
   async findAll() {
