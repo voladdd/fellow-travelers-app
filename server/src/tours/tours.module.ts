@@ -1,4 +1,4 @@
-import { UsersModule } from 'src/users/users.module';
+import { UsersModule } from '../users/users.module';
 import { ToursAbstractService } from './utils/other/tours.abstract.service';
 import { StatusController } from './controllers/status.controller';
 import { PlacesController } from './controllers/places.contoller';
@@ -19,7 +19,7 @@ import { RoadsService } from './services/roads.service';
 import { DbCollectionsController } from './controllers/db-collections.controller';
 import { TransportsController } from './controllers/transports.controller';
 import { RoadsController } from './controllers/roads.controller';
-import { User, UserSchema } from 'src/users/schemas/user.schema';
+import { User, UserSchema } from '../users/schemas/user.schema';
 
 @Module({
   imports: [
@@ -53,4 +53,4 @@ import { User, UserSchema } from 'src/users/schemas/user.schema';
     ToursController,
   ],
 })
-export class ToursModule {}
+export class ToursModule { }
