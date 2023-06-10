@@ -28,7 +28,7 @@ export class TourCreationPageComponent implements OnInit {
     private placesService: PlacesService,
   ) {
     console.log('tours creation component inited')
-    usersService.userProfile.subscribe((v) => {
+    this.usersService.userProfile.subscribe((v) => {
       console.log(v);
       this.userProfile = v;
     })

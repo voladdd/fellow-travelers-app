@@ -13,7 +13,7 @@ export class AppComponent implements OnInit {
   constructor(
     private telegramWebAppService: TelegramWebAppService,
     private authService: AuthService,
-    private usersService: UsersService,
+    private userService: UsersService,
     private router: Router
   ) {
   }
