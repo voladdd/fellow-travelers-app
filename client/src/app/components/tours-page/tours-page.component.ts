@@ -1,3 +1,4 @@
+import { TelegramWebAppService } from './../../telegram/services/telegram-webapp.service';
 import { throwError } from 'rxjs';
 import { ToursSerivce } from './../../services/tours.service';
 import { Component } from '@angular/core';
@@ -21,15 +22,16 @@ export class ToursPageComponent {
     private usersService: UsersService,
     private roadsService: RoadsService,
     private statusService: StatusService,
-    private toursSerivce: ToursSerivce
+    private toursSerivce: ToursSerivce,
+    private telegramWebAppService: TelegramWebAppService,
   ) {
     this.usersService.userProfile.subscribe((v) => {
       this.userProfile = v;
     })
   }
 
-  ngOnInit() {
-    this.getTours();
+  async ngOnInit() {
+    await this.getTours();
   }
 
   async getTours() {
