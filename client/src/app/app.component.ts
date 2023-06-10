@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { TelegramWebAppService } from './telegram/services/telegram-webapp.service';
 import { AuthService } from './services/auth.service';
+import { UsersService } from './services/users.service';
 
 @Component({
   selector: 'app-root',
@@ -12,10 +13,10 @@ export class AppComponent implements OnInit {
   constructor(
     private telegramWebAppService: TelegramWebAppService,
     private authService: AuthService,
+    private usersService: UsersService,
     private router: Router
-  ) { }
-
-  title = 'client';
+  ) {
+  }
 
   ngOnInit() {
     console.log('init app component')

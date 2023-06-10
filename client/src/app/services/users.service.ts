@@ -1,7 +1,7 @@
 import { environment } from './../../environment/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { firstValueFrom } from 'rxjs';
+import { Observable, firstValueFrom } from 'rxjs';
 import { UsersProfile } from './types/users';
 import { AuthService } from './auth.service';
 
@@ -9,15 +9,21 @@ import { AuthService } from './auth.service';
     providedIn: 'root'
 })
 export class UsersService {
-    // TODO: return observable values, that other can subscribe and getting inited user profile
-    public userProfile: UsersProfile | undefined;
+    public userProfile: Observable<UsersProfile>;
 
     constructor(private authService: AuthService, private httpClient: HttpClient) {
-        this.initUserProfile();
+        this.userProfile = new Observable((observer) => {
+            this.getUserProfile().then((v) => {
+                console.log(v);
+                observer.next(v);
+            });
+        })
+
+        console.log('init user service');
     }
 
-    private async initUserProfile() {
+    private async getUserProfile() {
         const response = await firstValueFrom(this.httpClient.get<UsersProfile>(`${environment.serverHost}/users/profile`, this.authService.httpOptions));
-        this.userProfile = response;
+        return response;
     }
 }

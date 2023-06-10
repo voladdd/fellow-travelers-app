@@ -1,5 +1,5 @@
 <h2>Создание поездки</h2>
-<form (ngSubmit)="onSubmit()">
+<form (ngSubmit)="onSubmit()" *ngIf="userProfile">
   <label>* Отправление *</label>
   <select [(ngModel)]="selectedOptionRoadStart" name="selectRoadStart" (change)="onSelectionChangeRoadStart($event.target)">
     <option *ngFor="let option of optionsPlaces" [value]="option.value">{{option.label}}</option>
