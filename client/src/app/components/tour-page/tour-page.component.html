@@ -1,1 +1,19 @@
-<p>tour-page works!</p>
+<div *ngIf="tour">
+    <h1>{{tour.road.placeRoadStart.name}} - > {{tour.road.placeRoadEnd.name}}<br>{{tour.road.timeStart | date: 'HH:mm dd.MM.y' }}</h1>
+
+    <h2>Информация о поездке</h2>
+    <h3>Автор: <a (click)="openExternalTelegramChat(tour.author.name)">{{tour.author.firstName}}</a></h3>
+    <p>{{tour.description}}</p>
+    <h3>Маршрут поездки и время отправления</h3>
+    <p>{{tour.road.placeRoadStart.address}} - > {{tour.road.placeRoadEnd.address}}<br>{{tour.road.timeStart | date: 'HH:mm dd.MM.y' }}</p>
+    <h3>Место и время встречи</h3>
+    <p>{{tour.road.placeMeeting.address}}<br>{{tour.road.timeMeeting | date: 'HH:mm dd.MM.y'}}</p>
+
+    <h2>Участники</h2>
+    <ul>
+        <li></li>
+    </ul>
+
+    <h3>{{tour.status.description}}</h3>
+    <button>Присоединиться</button>
+</div>

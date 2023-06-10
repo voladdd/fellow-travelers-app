@@ -1,6 +1,6 @@
 import { AfterViewChecked, Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { TelegramWebAppService } from './telegram/services/telegram-webapp.service';
+import { TelegramWebAppService } from './services/telegram-webapp.service';
 import { AuthService } from './services/auth.service';
 import { UsersService } from './services/users.service';
 

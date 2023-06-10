@@ -2,14 +2,14 @@ import { environment } from './../../environment/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, firstValueFrom } from 'rxjs';
-import { UsersProfile } from './types/users';
+import { User } from './types/users';
 import { AuthService } from './auth.service';
 
 @Injectable({
     providedIn: 'root'
 })
 export class UsersService {
-    public userProfile: Observable<UsersProfile>;
+    public userProfile: Observable<User>;
 
     constructor(private authService: AuthService, private httpClient: HttpClient) {
         this.userProfile = new Observable((observer) => {
@@ -23,7 +23,7 @@ export class UsersService {
     }
 
     private async getUserProfile() {
-        const response = await firstValueFrom(this.httpClient.get<UsersProfile>(`${environment.serverHost}/users/profile`, this.authService.httpOptions));
+        const response = await firstValueFrom(this.httpClient.get<User>(`${environment.serverHost}/users/profile`, this.authService.httpOptions));
         return response;
     }
 }

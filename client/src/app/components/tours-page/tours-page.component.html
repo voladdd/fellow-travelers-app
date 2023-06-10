@@ -1,10 +1,10 @@
-<p>Есть места, присоединяйся.</p>
+<h1>Доступные поездки</h1>
 <ul *ngIf="userProfile">
     <li *ngFor="let tour of tours">
       <h2>{{tour.road.placeRoadStart.name}} - > {{tour.road.placeRoadEnd.name}}<br>{{tour.road.timeStart | date: 'HH:mm dd.MM.y' }}</h2>
       <h3>{{tour.description}}</h3>
-      <p>Статус_ {{tour.status}}</p>
-      <p>Мест_ {{tour.participants}}/{{tour.maxPeopleCount}}</p>
-      <button>Показать</button>
+      <p>Статус {{tour.status}}</p>
+      <p>Мест {{tour.participants}}/{{tour.maxPeopleCount}}</p>
+      <button (click)="onTourOpenClick(tour.id)">Показать</button>
     </li>
   </ul>

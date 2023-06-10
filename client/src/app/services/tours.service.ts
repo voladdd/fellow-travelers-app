@@ -1,6 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { Tour, TourCreationBody, TourCreationResponse } from "./types/tours";
+import { Tour, TourCreationBody, TourCreationResponse, TourPopulated } from "./types/tours";
 import { AuthService } from "./auth.service";
 import { environment } from "src/environment/environment";
 import { firstValueFrom } from "rxjs";
@@ -17,5 +17,9 @@ export class ToursSerivce {
 
     async findAll(): Promise<Tour[]> {
         return await firstValueFrom(this.httpClient.get<Tour[]>(`${environment.serverHost}/tours`, this.authService.httpOptions));
+    }
+
+    async findById(id: string): Promise<TourPopulated> {
+        return await firstValueFrom(this.httpClient.get<TourPopulated>(`${environment.serverHost}/tours/${id}`, this.authService.httpOptions));
     }
 }

@@ -1,12 +1,14 @@
-<h2>Создание поездки</h2>
+<h1>Создание поездки</h1>
 <form (ngSubmit)="onSubmit()" *ngIf="userProfile">
-  <label>* Отправление *</label>
+  <h2>Отправление</h2>
+  <label>Маршрут</label>
   <select [(ngModel)]="selectedOptionRoadStart" name="selectRoadStart" (change)="onSelectionChangeRoadStart($event.target)">
     <option *ngFor="let option of optionsPlaces" [value]="option.value">{{option.label}}</option>
   </select>  
   <select [(ngModel)]="selectedOptionRoadEnd" name="selectRoadEnd" (change)="onSelectionChangeRoadEnd($event.target)">
     <option *ngFor="let option of optionsPlaces" [value]="option.value">{{option.label}}</option>
   </select>  
+  <label>Сколько мест?</label>
   <input type="number" name="maxPeopleCount" [(ngModel)]="maxPeopleCount" placeholder="Кол-во людей">
   <label>Когда?</label>
   <input type="date" name="roadStartDate" [(ngModel)]="roadStartDate">
@@ -17,14 +19,15 @@
     <option *ngFor="let option of optionsTransports" [value]="option.value">{{option.label}}</option>
   </select>  
 
-  <label>* Сбор *</label>
+  <h2>Сбор</h2>
+  <label>Где?</label>
   <select [(ngModel)]="selectedOptionPlaceMeeting" name="selectPlaceMeeting" (change)="onSelectionChangePlaceMeeting($event.target)">
     <option *ngFor="let option of optionsPlaces" [value]="option.value">{{option.label}}</option>
   </select>  
   <label>Во сколько?</label>
   <input type="time" name="placeMeetingTime" [(ngModel)]="placeMeetingTime">
 
-  <label>* Доп. информация *</label>
+  <h2>Доп. информация</h2>
   <textarea name="description" [(ngModel)]="description"></textarea>
   <button type="submit">Создать поездку</button>
 </form>

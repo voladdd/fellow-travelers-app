@@ -32,7 +32,7 @@ export class EchoUpdate {
           inline_keyboard: [
             [
               {
-                text: 'Забить местечко',
+                text: 'Попутчики',
                 web_app: { url: process.env.WEB_APP_URL },
               },
             ],

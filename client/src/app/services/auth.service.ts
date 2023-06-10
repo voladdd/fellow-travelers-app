@@ -1,7 +1,7 @@
 import { environment } from './../../environment/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { TelegramWebAppService } from '../telegram/services/telegram-webapp.service';
+import { TelegramWebAppService } from './telegram-webapp.service';
 import { firstValueFrom } from 'rxjs';
 import { AuthLoginResponse } from './types/auth';
 

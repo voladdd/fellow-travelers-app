@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { IWebApp } from '../types/webapp.interface';
+import { IWebApp } from './types/webapp';
 
 @Injectable({ providedIn: 'root' })
 export class TelegramWebAppService {
@@ -25,10 +25,14 @@ export class TelegramWebAppService {
         })
       })
     }
-    initElementsLikeButton(['button', 'select', 'textarea', 'input']);
 
+    initElementsLikeButton(['button', 'select', 'textarea', 'input']);
     document.body.style.setProperty('background-color', this.tg.themeParams.bg_color || '');
     document.body.style.setProperty('color', this.tg.themeParams.text_color || '');
+
+    document.querySelectorAll('a').forEach((element) => {
+      element.style.setProperty('color', this.tg.themeParams.link_color || '');
+    })
   }
 
   getInitData() {

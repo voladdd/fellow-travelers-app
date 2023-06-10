@@ -1,12 +1,13 @@
 import { ToursSerivce } from './../../services/tours.service';
 import { Component, OnInit } from '@angular/core';
-import { TelegramWebAppService } from '../../../app/telegram/services/telegram-webapp.service';
+import { TelegramWebAppService } from '../../services/telegram-webapp.service';
 import { getDateObjectByDateTime } from '../../../app/utils/functions';
 import { UsersService } from 'src/app/services/users.service';
 import { RoadsService } from 'src/app/services/roads.service';
 import { TransportsService } from 'src/app/services/transports';
 import { PlacesService } from 'src/app/services/places.service';
-import { UsersProfile } from 'src/app/services/types/users';
+import { User } from 'src/app/services/types/users';
+import { Router } from '@angular/router';
 
 interface SelectedOption {
   value: string;
@@ -20,6 +21,7 @@ interface SelectedOption {
 })
 export class TourCreationPageComponent implements OnInit {
   constructor(
+    private router: Router,
     private telegramWebAppService: TelegramWebAppService,
     private usersService: UsersService,
     private toursSerivce: ToursSerivce,
@@ -34,7 +36,7 @@ export class TourCreationPageComponent implements OnInit {
     })
   }
 
-  userProfile: UsersProfile | undefined;
+  userProfile: User | undefined;
 
   optionsPlaces: SelectedOption[] = [];
   optionsTransports: SelectedOption[] = [];
@@ -46,7 +48,7 @@ export class TourCreationPageComponent implements OnInit {
 
   roadStartTime: string = '';
   roadStartDate: string = '';
-  maxPeopleCount: string = '';
+  maxPeopleCount: string = '1';
   placeMeetingTime: string = '';
   description: string = '';
 
@@ -118,7 +120,7 @@ export class TourCreationPageComponent implements OnInit {
         );
 
         // TODO: navigate to tour page
-
+        this.router.navigate([`tours`, tour._id]);
       }
     } catch (error: any) {
       this.telegramWebAppService.alert(error.error, `${error.message}`)
