@@ -16,7 +16,7 @@ import { User } from '../utils/user.decorator';
 @UseGuards(JwtAuthGuard)
 @Controller('users')
 export class UsersController {
-  constructor(private usersService: UsersService) {}
+  constructor(private usersService: UsersService) { }
 
   //users/profile/tours&status=...&sort_by=
   //users/profile/tours&status=

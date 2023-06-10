@@ -13,7 +13,15 @@ import { TourListItemComponent } from './components/tour-list-item/tour-list-ite
 import { HomePageComponent } from './components/home-page/home-page.component';
 
 @NgModule({
-  declarations: [AppComponent, ToursPageComponent, ToursListComponent, TourPageComponent, TourCreationPageComponent, TourListItemComponent, HomePageComponent],
+  declarations: [
+    AppComponent,
+    HomePageComponent,
+    ToursPageComponent,
+    ToursListComponent,
+    TourPageComponent,
+    TourCreationPageComponent,
+    TourListItemComponent,
+  ],
   imports: [BrowserModule, HttpClientModule, AppRoutingModule, FormsModule],
   bootstrap: [AppComponent],
 })

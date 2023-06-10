@@ -3,9 +3,8 @@ import { Component, OnInit } from '@angular/core';
 import { TelegramWebAppService } from '../../../app/telegram/services/telegram-webapp.service';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environment/environment';
-import { forkJoin } from 'rxjs';
+import { firstValueFrom } from 'rxjs';
 import { Place, Transport } from '../../../app/types/types';
-import { headers } from '../../../app/utils/constants';
 import { getDateObjectByDateTime } from '../../../app/utils/functions';
 import { RoadCreationBody, RoadCreationResponse, TourCreationBody, TourCreationResponse } from '../../../app/types/http/post';
 
@@ -41,33 +40,31 @@ export class TourCreationPageComponent implements OnInit {
   placeMeetingTime: string = '';
   description: string = '';
 
-  ngOnInit(): void {
+  async ngOnInit() {
     // Load data
-    const places = this.httpClient.get<Place[]>(`http://${environment.serverHost}/tours/places`, { headers })
-    const transports = this.httpClient.get<Transport[]>(`http://${environment.serverHost}/tours/transports`, { headers })
+    console.log('init creation page')
+    const places = await firstValueFrom(this.httpClient.get<Place[]>(`${environment.serverHost}/tours/places`, this.stateService.httpOptions))
+    const transports = await firstValueFrom(this.httpClient.get<Transport[]>(`${environment.serverHost}/tours/transports`, this.stateService.httpOptions))
 
-    forkJoin([places, transports]).subscribe(response => {
-      // Set Places initial options
-      response[0].forEach((place) => {
-        this.optionsPlaces.push({
-          value: place._id,
-          label: place.address
-        })
+    places.forEach((place) => {
+      this.optionsPlaces.push({
+        value: place._id,
+        label: place.address
       })
+
       const defaultOptionsPlacesValue = this.optionsPlaces[0].value;
       this.selectedOptionRoadStart = defaultOptionsPlacesValue;
       this.selectedOptionRoadEnd = defaultOptionsPlacesValue;
       this.selectedOptionPlaceMeeting = defaultOptionsPlacesValue;
-
-      // Set Transports initial options
-      response[1].forEach((transport) => {
-        this.optionsTransports.push({
-          value: transport._id,
-          label: transport.name
-        })
-      })
-      this.selectedOptionTransport = this.optionsTransports[0].value;
     })
+
+    transports.forEach((transport) => {
+      this.optionsTransports.push({
+        value: transport._id,
+        label: transport.name
+      })
+    })
+    this.selectedOptionTransport = this.optionsTransports[0].value;
   }
 
   onSelectionChangeRoadStart(target: any) {
@@ -83,7 +80,7 @@ export class TourCreationPageComponent implements OnInit {
     this.selectedOptionTransport = target.value;
   }
 
-  onSubmit() {
+  async onSubmit() {
     // Create road
     const timeStart = getDateObjectByDateTime(this.roadStartDate, this.roadStartTime);
     const timeMeeting = getDateObjectByDateTime(this.roadStartDate, this.placeMeetingTime);
@@ -97,29 +94,30 @@ export class TourCreationPageComponent implements OnInit {
       transport: this.selectedOptionTransport
     }
 
-    this.httpClient.post<RoadCreationResponse>(`http://${environment.serverHost}/tours/roads`, roadCreationBody, { headers }).subscribe({
+    this.httpClient.post<RoadCreationResponse>(`${environment.serverHost}/tours/roads`, roadCreationBody, this.stateService.httpOptions).subscribe({
       next: (roadCreationResponse) => {
-        // Create tour
-        const tourCreationBody: TourCreationBody = {
-          description: this.description,
-          maxPeopleCount: Number(this.maxPeopleCount),
-          author: this.stateService.userProfile!._id,
-          road: roadCreationResponse._id
-        }
-
-        this.httpClient.post<TourCreationResponse>(`http://${environment.serverHost}/tours`, tourCreationBody, { headers }).subscribe({
-          next: () => {
-            this.telegramWebAppService.alert('Поездка успешно создана',
-              `Маршрут: ${this.optionsPlaces.find((place) => place.value === this.selectedOptionRoadStart)?.label} - ${this.optionsPlaces.find((place) => place.value === this.selectedOptionRoadEnd)?.label}`
-            );
-          },
-          error: (error: any) => {
-            this.telegramWebAppService.alert(error.error, `${error.message}`)
+        if (this.stateService.userProfile) {
+          // Create tour
+          const tourCreationBody: TourCreationBody = {
+            description: this.description,
+            maxPeopleCount: Number(this.maxPeopleCount),
+            author: this.stateService.userProfile._id,
+            road: roadCreationResponse._id
           }
-        })
-      },
-      error: (error: any) => {
-        this.telegramWebAppService.alert(error.error, `${error.message}`)
+
+          this.httpClient.post<TourCreationResponse>(`${environment.serverHost}/tours`, tourCreationBody, this.stateService.httpOptions).subscribe({
+            next: () => {
+              this.telegramWebAppService.alert('Поездка успешно создана',
+                `Маршрут: ${this.optionsPlaces.find((place) => place.value === this.selectedOptionRoadStart)?.label} - ${this.optionsPlaces.find((place) => place.value === this.selectedOptionRoadEnd)?.label}`
+              );
+
+              // TODO: navigate to tour page
+            },
+            error: (error: any) => {
+              this.telegramWebAppService.alert(error.error, `${error.message}`)
+            }
+          })
+        }
       }
     })
   }

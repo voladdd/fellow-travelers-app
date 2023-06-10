@@ -1,3 +1,11 @@
+export interface AuthLoginHeaders {
+    'init-data': string;
+}
+
+export interface AuthLoginResponse {
+    access_token: string;
+}
+
 export interface RoadCreationBody {
     placeRoadStart: string;
     placeRoadEnd: string;
