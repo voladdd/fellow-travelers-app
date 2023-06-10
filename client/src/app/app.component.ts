@@ -1,7 +1,7 @@
-import { StateService } from './utils/state';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { TelegramWebAppService } from './telegram/services/telegram-webapp.service';
+import { AuthService } from './services/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -9,7 +9,11 @@ import { TelegramWebAppService } from './telegram/services/telegram-webapp.servi
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
-  constructor(private telegramWebAppService: TelegramWebAppService, private router: Router, private stateService: StateService) { }
+  constructor(
+    private telegramWebAppService: TelegramWebAppService,
+    private authService: AuthService,
+    private router: Router
+  ) { }
 
   title = 'client';
 
