@@ -9,6 +9,7 @@ import { ToursPageComponent } from './components/tours-page/tours-page.component
 import { TourPageComponent } from './components/tour-page/tour-page.component';
 import { TourCreationPageComponent } from './components/tour-creation-page/tour-creation-page.component';
 import { HomePageComponent } from './components/home-page/home-page.component';
+import { MyToursPageComponent } from './components/my-tours-page/my-tours-page.component';
 
 @NgModule({
   declarations: [
@@ -17,6 +18,7 @@ import { HomePageComponent } from './components/home-page/home-page.component';
     ToursPageComponent,
     TourPageComponent,
     TourCreationPageComponent,
+    MyToursPageComponent
   ],
   imports: [BrowserModule, HttpClientModule, AppRoutingModule, FormsModule],
   bootstrap: [AppComponent],

@@ -5,6 +5,7 @@ import { ToursPageComponent } from './components/tours-page/tours-page.component
 import { TourPageComponent } from './components/tour-page/tour-page.component';
 import { TourCreationPageComponent } from './components/tour-creation-page/tour-creation-page.component';
 import { FormsModule } from '@angular/forms';
+import { MyToursPageComponent } from './components/my-tours-page/my-tours-page.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -12,6 +13,7 @@ const routes: Routes = [
   { path: 'tours/create', component: TourCreationPageComponent },
   { path: 'tours/:id', component: TourPageComponent },
   { path: 'tours', component: ToursPageComponent },
+  { path: 'users/profile', component: MyToursPageComponent },
 ];
 
 @NgModule({

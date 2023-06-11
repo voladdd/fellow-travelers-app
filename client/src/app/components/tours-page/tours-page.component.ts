@@ -1,6 +1,6 @@
 import { throwError } from 'rxjs';
 import { ToursSerivce } from './../../services/tours.service';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { User } from 'src/app/services/types/users';
 import { UsersService } from 'src/app/services/users.service';
 import { RoadsService } from 'src/app/services/roads.service';
@@ -13,7 +13,7 @@ import { Router } from '@angular/router';
   templateUrl: './tours-page.component.html',
   styleUrls: ['./tours-page.component.scss']
 })
-export class ToursPageComponent {
+export class ToursPageComponent implements OnInit {
 
   tours: ToursPageListItem[] | undefined;
   userProfile: User | undefined;
@@ -39,7 +39,6 @@ export class ToursPageComponent {
   }
 
   async getTours() {
-    // TODO: display only not-finished tours
     console.log('user profile' + this.userProfile);
     try {
       const tours = await this.toursSerivce.findAll();
@@ -56,7 +55,7 @@ export class ToursPageComponent {
           road: road!, // TODO: check if its not undefined
           status: `${status.find((status) => status._id === tour.status)?.name}`,
         }
-      })
+      }).filter((tour) => tour.status === 'Открыт')
     } catch (error) {
       throwError(() => {
         return new Error('Error trying to getTours' + error);

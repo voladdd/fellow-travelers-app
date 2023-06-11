@@ -4,6 +4,7 @@ import { Injectable } from '@angular/core';
 import { Observable, firstValueFrom, lastValueFrom } from 'rxjs';
 import { User } from './types/users';
 import { AuthService } from './auth.service';
+import { Tour } from './types/tours';
 
 @Injectable({
     providedIn: 'root'
@@ -26,5 +27,9 @@ export class UsersService {
         console.log(this.authService.httpOptions);
         const response = await lastValueFrom(this.httpClient.get<User>(`${environment.serverHost}/users/profile`, this.authService.httpOptions));
         return response;
+    }
+
+    async findAllTours(): Promise<Tour[]> {
+        return await firstValueFrom(this.httpClient.get<Tour[]>(`${environment.serverHost}/users/profile/tours`, this.authService.httpOptions));
     }
 }
