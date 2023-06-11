@@ -1,4 +1,4 @@
-<h1>Доступные поездки</h1>
+<h1>Участие в поездках</h1>
 <ul *ngIf="userProfile">
     <li *ngFor="let tour of tours">
       <h2>{{tour.road.placeRoadStart.name}} - > {{tour.road.placeRoadEnd.name}}<br>{{tour.road.timeStart | date: 'HH:mm dd.MM.y' }}</h2>

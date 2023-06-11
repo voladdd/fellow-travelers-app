@@ -6,14 +6,20 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
 import { ToursPageComponent } from './components/tours-page/tours-page.component';
-import { ToursListComponent } from './components/tours-list/tours-list.component';
 import { TourPageComponent } from './components/tour-page/tour-page.component';
 import { TourCreationPageComponent } from './components/tour-creation-page/tour-creation-page.component';
-import { TourListItemComponent } from './components/tour-list-item/tour-list-item.component';
 import { HomePageComponent } from './components/home-page/home-page.component';
+import { MyToursPageComponent } from './components/my-tours-page/my-tours-page.component';
 
 @NgModule({
-  declarations: [AppComponent, ToursPageComponent, ToursListComponent, TourPageComponent, TourCreationPageComponent, TourListItemComponent, HomePageComponent],
+  declarations: [
+    AppComponent,
+    HomePageComponent,
+    ToursPageComponent,
+    TourPageComponent,
+    TourCreationPageComponent,
+    MyToursPageComponent
+  ],
   imports: [BrowserModule, HttpClientModule, AppRoutingModule, FormsModule],
   bootstrap: [AppComponent],
 })

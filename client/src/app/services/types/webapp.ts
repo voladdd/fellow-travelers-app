@@ -21,9 +21,11 @@ export interface IWebApp {
    * A method that closes the Web App.
    * */
   close(): void;
-  showPopup(params: IPopupParams, callback?: () => {}): () => {};
-  MainButton: IMainButton;
-  PopupParams: IPopupParams;
+  showPopup(params: IPopupParams, callback?: () => void): void;
+  onEvent(eventType: string, eventHandler: () => void): void;
+  readonly MainButton: IMainButton;
+  readonly PopupParams: IPopupParams;
+  readonly themeParams: IThemeParams;
 }
 
 /**
@@ -84,4 +86,21 @@ Can be one of these values:
    * Optional. The text to be displayed on the button, 0-64 characters. Required if type is default or destructive. Irrelevant for other types.
    */
   text?: string;
+}
+
+interface IThemeParams {
+  /** Optional. Background color in the #RRGGBB format. Also available as the CSS variable var(--tg-theme-bg-color). */
+  bg_color?: string;
+  /** Optional. Main text color in the #RRGGBB format. Also available as the CSS variable var(--tg-theme-text-color). */
+  text_color?: string;
+  /** Optional. Hint text color in the #RRGGBB format. Also available as the CSS variable var(--tg-theme-hint-color). */
+  hint_color?: string;
+  /** Optional. Link color in the #RRGGBB format. Also available as the CSS variable var(--tg-theme-link-color). */
+  link_color?: string;
+  /** Optional. Button color in the #RRGGBB format. Also available as the CSS variable var(--tg-theme-button-color). */
+  button_color?: string;
+  /** Optional. Button text color in the #RRGGBB format. Also available as the CSS variable var(--tg-theme-button-text-color). */
+  button_text_color?: string;
+  /** Optional. Bot API 6.1+ Secondary background color in the #RRGGBB format. Also available as the CSS variable var(--tg-theme-secondary-bg-color). */
+  secondary_bg_color?: string;
 }

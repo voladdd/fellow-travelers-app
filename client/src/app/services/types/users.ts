@@ -1,4 +1,4 @@
-export interface UsersProfile {
+export interface User {
     _id: string;
     tgId: number;
     name: string;

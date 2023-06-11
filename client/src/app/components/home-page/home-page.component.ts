@@ -6,5 +6,7 @@ import { Component } from '@angular/core';
   styleUrls: ['./home-page.component.scss']
 })
 export class HomePageComponent {
-
+  constructor() {
+    console.log('home page component inited')
+  }
 }

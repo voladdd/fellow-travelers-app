@@ -1,13 +1,13 @@
-import { StateService } from './../../utils/state';
+import { ToursSerivce } from './../../services/tours.service';
 import { Component, OnInit } from '@angular/core';
-import { TelegramWebAppService } from '../../../app/telegram/services/telegram-webapp.service';
-import { HttpClient } from '@angular/common/http';
-import { environment } from '../../../environment/environment';
-import { forkJoin } from 'rxjs';
-import { Place, Transport } from '../../../app/types/types';
-import { headers } from '../../../app/utils/constants';
+import { TelegramWebAppService } from '../../services/telegram-webapp.service';
 import { getDateObjectByDateTime } from '../../../app/utils/functions';
-import { RoadCreationBody, RoadCreationResponse, TourCreationBody, TourCreationResponse } from '../../../app/types/http/post';
+import { UsersService } from 'src/app/services/users.service';
+import { RoadsService } from 'src/app/services/roads.service';
+import { TransportsService } from 'src/app/services/transports';
+import { PlacesService } from 'src/app/services/places.service';
+import { User } from 'src/app/services/types/users';
+import { Router } from '@angular/router';
 
 interface SelectedOption {
   value: string;
@@ -20,12 +20,23 @@ interface SelectedOption {
   styleUrls: ['./tour-creation-page.component.scss']
 })
 export class TourCreationPageComponent implements OnInit {
-
   constructor(
+    private router: Router,
     private telegramWebAppService: TelegramWebAppService,
-    private httpClient: HttpClient,
-    private stateService: StateService,
-  ) { }
+    private usersService: UsersService,
+    private toursSerivce: ToursSerivce,
+    private roadsService: RoadsService,
+    private transportsService: TransportsService,
+    private placesService: PlacesService,
+  ) {
+    console.log('tours creation component inited')
+    this.usersService.userProfile.subscribe((v) => {
+      console.log(v);
+      this.userProfile = v;
+    })
+  }
+
+  userProfile: User | undefined;
 
   optionsPlaces: SelectedOption[] = [];
   optionsTransports: SelectedOption[] = [];
@@ -37,41 +48,40 @@ export class TourCreationPageComponent implements OnInit {
 
   roadStartTime: string = '';
   roadStartDate: string = '';
-  maxPeopleCount: string = '';
+  maxPeopleCount: string = '1';
   placeMeetingTime: string = '';
   description: string = '';
 
-  ngOnInit(): void {
+  async ngOnInit() {
     // Load data
-    const places = this.httpClient.get<Place[]>(`http://${environment.serverHost}/tours/places`, { headers })
-    const transports = this.httpClient.get<Transport[]>(`http://${environment.serverHost}/tours/transports`, { headers })
+    console.log('init creation page')
+    const places = await this.placesService.findAll();
+    const transports = await this.transportsService.findAll();
 
-    forkJoin([places, transports]).subscribe(response => {
-      // Set Places initial options
-      response[0].forEach((place) => {
-        this.optionsPlaces.push({
-          value: place._id,
-          label: place.address
-        })
+    places.forEach((place) => {
+      this.optionsPlaces.push({
+        value: place._id,
+        label: place.name
       })
+
       const defaultOptionsPlacesValue = this.optionsPlaces[0].value;
       this.selectedOptionRoadStart = defaultOptionsPlacesValue;
       this.selectedOptionRoadEnd = defaultOptionsPlacesValue;
       this.selectedOptionPlaceMeeting = defaultOptionsPlacesValue;
-
-      // Set Transports initial options
-      response[1].forEach((transport) => {
-        this.optionsTransports.push({
-          value: transport._id,
-          label: transport.name
-        })
-      })
-      this.selectedOptionTransport = this.optionsTransports[0].value;
     })
+
+    transports.forEach((transport) => {
+      this.optionsTransports.push({
+        value: transport._id,
+        label: transport.name
+      })
+    })
+    this.selectedOptionTransport = this.optionsTransports[0].value;
   }
 
   onSelectionChangeRoadStart(target: any) {
     this.selectedOptionRoadStart = target.value;
+    this.selectedOptionPlaceMeeting = target.value;
   }
   onSelectionChangeRoadEnd(target: any) {
     this.selectedOptionRoadEnd = target.value;
@@ -83,44 +93,38 @@ export class TourCreationPageComponent implements OnInit {
     this.selectedOptionTransport = target.value;
   }
 
-  onSubmit() {
-    // Create road
+  async onSubmit() {
     const timeStart = getDateObjectByDateTime(this.roadStartDate, this.roadStartTime);
+    // TODO: make default time meeting -5 minutes from selected of roadStartTime
     const timeMeeting = getDateObjectByDateTime(this.roadStartDate, this.placeMeetingTime);
 
-    const roadCreationBody: RoadCreationBody = {
-      placeRoadStart: this.selectedOptionRoadStart,
-      placeRoadEnd: this.selectedOptionRoadEnd,
-      placeMeeting: this.selectedOptionPlaceMeeting,
-      timeMeeting,
-      timeStart,
-      transport: this.selectedOptionTransport
-    }
+    try {
+      const road = await this.roadsService.create({
+        placeRoadStart: this.selectedOptionRoadStart,
+        placeRoadEnd: this.selectedOptionRoadEnd,
+        placeMeeting: this.selectedOptionPlaceMeeting,
+        timeMeeting,
+        timeStart,
+        transport: this.selectedOptionTransport
+      });
 
-    this.httpClient.post<RoadCreationResponse>(`http://${environment.serverHost}/tours/roads`, roadCreationBody, { headers }).subscribe({
-      next: (roadCreationResponse) => {
-        // Create tour
-        const tourCreationBody: TourCreationBody = {
+      if (this.userProfile) {
+        const tour = await this.toursSerivce.create({
           description: this.description,
           maxPeopleCount: Number(this.maxPeopleCount),
-          author: this.stateService.userProfile!._id,
-          road: roadCreationResponse._id
-        }
+          author: this.userProfile._id,
+          road: road._id
+        });
 
-        this.httpClient.post<TourCreationResponse>(`http://${environment.serverHost}/tours`, tourCreationBody, { headers }).subscribe({
-          next: () => {
-            this.telegramWebAppService.alert('Поездка успешно создана',
-              `Маршрут: ${this.optionsPlaces.find((place) => place.value === this.selectedOptionRoadStart)?.label} - ${this.optionsPlaces.find((place) => place.value === this.selectedOptionRoadEnd)?.label}`
-            );
-          },
-          error: (error: any) => {
-            this.telegramWebAppService.alert(error.error, `${error.message}`)
-          }
-        })
-      },
-      error: (error: any) => {
-        this.telegramWebAppService.alert(error.error, `${error.message}`)
+        this.telegramWebAppService.alert('Поездка успешно создана',
+          `Маршрут: ${this.optionsPlaces.find((place) => place.value === this.selectedOptionRoadStart)?.label} - ${this.optionsPlaces.find((place) => place.value === this.selectedOptionRoadEnd)?.label}`
+        );
+
+        // TODO: navigate to tour page
+        this.router.navigate([`tours`, tour._id]);
       }
-    })
+    } catch (error: any) {
+      this.telegramWebAppService.alert(error.error, `${error.message}`)
+    }
   }
 }
