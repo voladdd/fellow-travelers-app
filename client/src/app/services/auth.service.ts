@@ -13,7 +13,6 @@ export class AuthService {
     public httpOptions: {
         headers: {
             'init-data': string;
-            'Bypass-Tunnel-Reminder': string;
             'Authorization'?: string;
         };
     };
@@ -23,7 +22,6 @@ export class AuthService {
         this.httpOptions = {
             headers: {
                 'init-data': this.initData,
-                'Bypass-Tunnel-Reminder': '0',
             },
         };
         console.log('init auth service');

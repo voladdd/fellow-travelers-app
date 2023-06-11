@@ -42,3 +42,7 @@ export interface TourPopulated extends TourAbstract {
     road: Road;
     status: Status;
 }
+
+export interface UpdateStatusBody {
+    status: string;
+}

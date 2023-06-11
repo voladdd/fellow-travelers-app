@@ -1,7 +1,7 @@
 import { environment } from './../../environment/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, firstValueFrom } from 'rxjs';
+import { Observable, firstValueFrom, lastValueFrom } from 'rxjs';
 import { User } from './types/users';
 import { AuthService } from './auth.service';
 
@@ -23,7 +23,8 @@ export class UsersService {
     }
 
     private async getUserProfile() {
-        const response = await firstValueFrom(this.httpClient.get<User>(`${environment.serverHost}/users/profile`, this.authService.httpOptions));
+        console.log(this.authService.httpOptions);
+        const response = await lastValueFrom(this.httpClient.get<User>(`${environment.serverHost}/users/profile`, this.authService.httpOptions));
         return response;
     }
 }

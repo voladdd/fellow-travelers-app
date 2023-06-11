@@ -11,6 +11,7 @@ import { UsersService } from './services/users.service';
 })
 export class AppComponent implements OnInit, AfterViewChecked {
   constructor(
+    // Unused services still need to be inited at the beginning!
     private telegramWebAppService: TelegramWebAppService,
     private authService: AuthService,
     private userService: UsersService,

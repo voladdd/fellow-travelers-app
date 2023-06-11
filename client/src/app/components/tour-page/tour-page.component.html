@@ -8,12 +8,40 @@
     <p>{{tour.road.placeRoadStart.address}} - > {{tour.road.placeRoadEnd.address}}<br>{{tour.road.timeStart | date: 'HH:mm dd.MM.y' }}</p>
     <h3>Место и время встречи</h3>
     <p>{{tour.road.placeMeeting.address}}<br>{{tour.road.timeMeeting | date: 'HH:mm dd.MM.y'}}</p>
+    <h3>Транспорт</h3>
+    <p>{{tour.road.transport.name}}<br>{{tour.road.transport.description}}</p>
 
-    <h2>Участники</h2>
+    <h2>Участники {{participantsCount}}/{{tour.maxPeopleCount}}</h2>
     <ul>
-        <li></li>
+        <li *ngFor="let participant of tour.participants">
+            <h4><a (click)="openExternalTelegramChat(tour.author.name)">{{participant.firstName}}</a></h4>
+            <button 
+                *ngIf="(isAuthor) && (participant._id !== tour.author._id) && (tour.status.name === 'Открыт')"
+                (click)="kick(participant._id)"
+            >Выгнать</button>
+        </li>
     </ul>
 
     <h3>{{tour.status.description}}</h3>
-    <button>Присоединиться</button>
+    <button 
+        *ngIf="(tour.status.name === 'Открыт') && (!isParticipating) && (userProfile && userProfile._id !== tour.author._id)"
+        (click)="join()"
+        >Присоединиться</button>
+    <button 
+        *ngIf="(tour.status.name === 'Открыт') && (isParticipating) && (userProfile && userProfile._id !== tour.author._id)"
+        (click)="leave()"
+    >Выйти</button>
+
+    <button
+        *ngIf="(isAuthor) && (tour.status.name === 'Открыт')"
+        (click)="updateStatus('Закрыт')"
+    >Закрыть набор участников</button>
+    <button
+        *ngIf="(isAuthor) && (tour.status.name === 'Закрыт')"
+        (click)="updateStatus('Открыт')"
+    >Снова открыть набор</button>
+    <button
+        *ngIf="(isAuthor) && (tour.status.name === 'Закрыт')"
+        (click)="updateStatus('Завершен')"
+    >Завершить поездку</button>
 </div>

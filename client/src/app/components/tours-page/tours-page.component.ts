@@ -25,13 +25,13 @@ export class ToursPageComponent {
     private statusService: StatusService,
     private toursSerivce: ToursSerivce,
   ) {
-    this.usersService.userProfile.subscribe((v) => {
-      this.userProfile = v;
-    })
   }
 
   async ngOnInit() {
-    await this.getTours();
+    this.usersService.userProfile.subscribe(async (v) => {
+      this.userProfile = v;
+      await this.getTours();
+    })
   }
 
   onTourOpenClick(id: string) {
@@ -40,6 +40,7 @@ export class ToursPageComponent {
 
   async getTours() {
     // TODO: display only not-finished tours
+    console.log('user profile' + this.userProfile);
     try {
       const tours = await this.toursSerivce.findAll();
       const roads = await this.roadsService.findAll();

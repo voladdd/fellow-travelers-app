@@ -21,7 +21,7 @@ export class ToursService {
     @InjectModel(User.name) private userModel: Model<UserDocument>,
     @InjectModel(Road.name) private roadModel: Model<RoadDocument>,
     private toursAbstractService: ToursAbstractService,
-  ) {}
+  ) { }
 
   async updateStatus(
     reqUserId: Types.ObjectId,
@@ -159,6 +159,8 @@ export class ToursService {
       throw new BadRequestException(`User #${userId} already in tour`);
     }
 
+    // TODO: calculate how much already participants at tour, if it already fullfilled then reject 
+
     //add user in tour
     tour.participants.push(user);
     await tour.save();
@@ -217,7 +219,7 @@ export class ToursService {
         tour,
         user.id,
       );
-      if (!userIndex) {
+      if (userIndex === null) {
         throw new NotFoundException(`User #${user.id} not found`);
       }
       return userIndex;
