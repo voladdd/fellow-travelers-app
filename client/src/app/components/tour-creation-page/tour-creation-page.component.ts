@@ -61,7 +61,7 @@ export class TourCreationPageComponent implements OnInit {
     places.forEach((place) => {
       this.optionsPlaces.push({
         value: place._id,
-        label: place.address
+        label: place.name
       })
 
       const defaultOptionsPlacesValue = this.optionsPlaces[0].value;
@@ -81,6 +81,7 @@ export class TourCreationPageComponent implements OnInit {
 
   onSelectionChangeRoadStart(target: any) {
     this.selectedOptionRoadStart = target.value;
+    this.selectedOptionPlaceMeeting = target.value;
   }
   onSelectionChangeRoadEnd(target: any) {
     this.selectedOptionRoadEnd = target.value;
@@ -93,8 +94,8 @@ export class TourCreationPageComponent implements OnInit {
   }
 
   async onSubmit() {
-    // Create road
     const timeStart = getDateObjectByDateTime(this.roadStartDate, this.roadStartTime);
+    // TODO: make default time meeting -5 minutes from selected of roadStartTime
     const timeMeeting = getDateObjectByDateTime(this.roadStartDate, this.placeMeetingTime);
 
     try {
