@@ -1,0 +1,2 @@
+# Fellow travelers app
+This final qualifying work is devoted to the development of a web service for finding fellow travelers, focused primarily on students of the University «Dubna». Modern technologies such as Angular, NestJS and Telegram Web App were used in the work. The main goal of the work was to create a functional and convenient tool that allows students to effectively find fellow travelers for joint trips.
